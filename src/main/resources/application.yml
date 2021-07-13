@@ -1,0 +1,58 @@
+spring:
+  redis:
+    host: 192.168.31.72
+    port: 6379
+    password: Admin@123
+    timeout: 60000
+    # redis连接池配置
+    jedis:
+      pool:
+        # 最大可用连接数（默认为8，负数表示无限）
+        max-active: 8
+        # 最大空闲连接数（默认为8，负数表示无限）
+        max-idle: 8
+        # 最小空闲连接数（默认为0，该值只有为正数才有用）
+        min-idle: 0
+        # 从连接池中获取连接最大等待时间（默认为-1，单位为毫秒，负数表示无限）
+        max-wait: -1
+  application:
+    name: authentication
+  datasource:
+    username: root
+    password: Admin@123
+    url: jdbc:mysql://192.168.31.72:3306/db_hn_new_energy?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true&zeroDateTimeBehavior=convertToNull&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    driverClassName: com.mysql.cj.jdbc.Driver
+
+#      durid:
+#        initial-size: 1
+#        max-active: 20
+#        min-idle: 1
+#        max-wait: 60000
+#        autoconfigure:
+#        exclude:  com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure # 去除druid配置
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+
+server:
+  port: 8080
+
+logging:
+  level:
+    io.swagger.models.parameters.AbstractSerializableParameter: error
+
+# 配置sql打印日志
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  #mapper-locations: classpath*:/com/ttxc/newenergy/mapping/*Mapping.xml
+  global-config:
+      db-config:
+        logic-delete-field: flag  #全局逻辑删除字段值 3.3.0开始支持，详情看下面。
+        logic-delete-value: 3 # 逻辑已删除值(默认为 1)
+        logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
+
+#swagger开关，本地true，线上false
+swagger2:
+  enable: true
+
