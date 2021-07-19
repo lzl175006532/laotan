@@ -51,7 +51,7 @@ public class LoginController {
         if(StringUtils.isEmpty(cellPhone) || StringUtils.isEmpty(verifyCode)){
             return new JsonResult(ResultStatusCode.NOT_NULL);
         }
-        // TODO: 2021/7/13 验证手机号验证码
+        // TODO: 2021/7/13 验证手机号验证码逻辑
 
         logger.info("{}登录结束，验证码为{}",cellPhone,verifyCode);
         return new JsonResult(ResultStatusCode.SUCCESS);
