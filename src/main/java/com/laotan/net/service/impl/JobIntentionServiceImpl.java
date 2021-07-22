@@ -2,12 +2,9 @@ package com.laotan.net.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.laotan.net.controller.mapper.JobIntentionMapper;
-import com.laotan.net.controller.mapper.UserMapper;
+import com.laotan.net.mapper.JobIntentionMapper;
 import com.laotan.net.entity.JobIntention;
-import com.laotan.net.entity.User;
 import com.laotan.net.service.JobIntentionService;
-import com.laotan.net.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,5 +33,13 @@ public class JobIntentionServiceImpl extends ServiceImpl<JobIntentionMapper, Job
         wrapper.eq(JobIntention :: getUserId,userId);
         int delete = jobIntentionMapper.delete(wrapper);
         return delete;
+    }
+
+    @Override
+    public List<JobIntention> selectByUserId(Integer userId) {
+        LambdaQueryWrapper<JobIntention> wrapper = new LambdaQueryWrapper();
+        wrapper.eq(JobIntention :: getUserId,userId);
+        List<JobIntention> jobIntentions = jobIntentionMapper.selectList(wrapper);
+        return jobIntentions;
     }
 }

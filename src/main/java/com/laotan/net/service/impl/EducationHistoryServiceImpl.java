@@ -2,9 +2,8 @@ package com.laotan.net.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.laotan.net.controller.mapper.EducationHistoryMapper;
+import com.laotan.net.mapper.EducationHistoryMapper;
 import com.laotan.net.entity.EducationHistory;
-import com.laotan.net.entity.JobIntention;
 import com.laotan.net.service.EducationHistoryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -2,7 +2,7 @@ package com.laotan.net.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.laotan.net.controller.mapper.UserMapper;
+import com.laotan.net.mapper.UserMapper;
 import com.laotan.net.entity.*;
 import com.laotan.net.service.*;
 import org.slf4j.Logger;

@@ -28,7 +28,7 @@ import java.util.List;
 @TableName("tb_job_intention")
 public class JobIntention extends BaseEntity {
 
-    @ApiModelProperty(value = "求职类型：全职、兼职、实习")
+    @ApiModelProperty(value = "用户id")
     private Integer userId;
 
     @ApiModelProperty(value = "求职类型：全职、兼职、实习")
@@ -38,13 +38,13 @@ public class JobIntention extends BaseEntity {
     private String workCity;
 
     @ApiModelProperty(value = "工作城市Id")
-    private String workCityId;
+    private Integer workCityId;
 
     @ApiModelProperty(value = "期望职位名称")
     private String expectJobName;
 
     @ApiModelProperty(value = "期望职位id")
-    private String expectJobId;
+    private Integer expectJobId;
 
     @ApiModelProperty(value = "期望行业名称")
     private String expectVocationName;

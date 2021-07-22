@@ -24,10 +24,10 @@ public class Account extends BaseEntity{
     @ApiModelProperty(value = "用户手机号(账号)")
     private String cellPhone ;
 
-    @ApiModelProperty(value = "登录类型（0-应聘者登录，1-boss登录）")
+    @ApiModelProperty(value = "登录类型（USER-应聘者登录，BOSS-boss登录）")
     private String loginType ;
 
-    @ApiModelProperty(value = "验证码")
+    @ApiModelProperty(value = "短信验证码")
     private String verifyCode;
 
     @ApiModelProperty(value = "状态")

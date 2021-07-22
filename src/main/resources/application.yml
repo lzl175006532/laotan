@@ -20,7 +20,7 @@ spring:
   datasource:
     username: root
     password: Admin@123
-    url: jdbc:mysql://192.168.31.72:3306/db_hn_new_energy?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true&zeroDateTimeBehavior=convertToNull&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://192.168.31.72:3306/laotan?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true&zeroDateTimeBehavior=convertToNull&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
     driverClassName: com.mysql.cj.jdbc.Driver
 
 #      durid:

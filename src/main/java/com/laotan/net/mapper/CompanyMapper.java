@@ -1,7 +1,7 @@
-package com.laotan.net.controller.mapper;
+package com.laotan.net.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.laotan.net.entity.Boss;
+import com.laotan.net.entity.Company;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -13,6 +13,6 @@ import org.springframework.stereotype.Repository;
  * @since 2019-10-23
  */
 @Repository
-public interface BossMapper extends BaseMapper<Boss> {
+public interface CompanyMapper extends BaseMapper<Company> {
 
 }

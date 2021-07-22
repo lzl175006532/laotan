@@ -1,10 +1,11 @@
 package com.laotan.net.controller.app;
 
+import com.laotan.net.common.CommenEnum;
 import com.laotan.net.common.JsonResult;
 import com.laotan.net.common.ResultStatusCode;
-import com.laotan.net.entity.Boss;
-import com.laotan.net.entity.User;
-import com.laotan.net.service.BossService;
+import com.laotan.net.entity.PublishJob;
+import com.laotan.net.service.AccountService;
+import com.laotan.net.service.PublishJobService;
 import com.laotan.net.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -23,16 +24,17 @@ import org.springframework.web.bind.annotation.RestController;
  * @Copyright: 通泰信诚
  * @Author: lizilong
  * @Since: 2021/5/19 17:56
- * @Description: 前端招聘者用户信息
+ * @Description: app前端手机发布职位控制层
  */
 @RestController
-@RequestMapping("app/boss")
-@Api(tags = {"前端招聘者用户信息"})
-public class BossController {
+@RequestMapping("app/login")
+@Api(tags = {"前端手机发布职位控制层"})
+public class PublishJobController {
     private Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
-    private BossService bossService;
+    private PublishJobService publishJobService;
+
 
     /**
      * @Copyright: 通泰信诚
@@ -40,17 +42,22 @@ public class BossController {
      * @Since: 2021/5/21 11:38
      * @Params: [account, password]
      * @Return: com.ttxc.newenergy.common.JsonResult
-     * @Description: 保存或更新招聘者用户注册信息,如果是修改：修改哪个哪个不为空，并且id不为空，其他为空即可
+     * @Description: 新增发布职位信息
      */
-    @ApiOperation(value="保存或更新招聘者用户注册信息,如果是修改：修改哪个哪个不为空，并且id不为空，其他为空即可", notes="保存或更新招聘者用户注册信息,如果是修改：修改哪个哪个不为空，并且id不为空，其他为空即可")
-    @PostMapping(value = "/saveOrUpdateInfo")
-    public JsonResult saveOrUpdateInfo(@RequestBody Boss boss) {
-        if(boss == null){
+    @ApiOperation(value="新增发布职位信息", notes="新增发布职位信息")
+    @PostMapping(value = "/saveInfo")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "cellPhone", value = "手机号", dataType = "String", required = true, defaultValue = ""),
+            @ApiImplicitParam(name = "verifyCode", value = "短信验证码", dataType = "String", required = true, defaultValue = "")
+    })
+    public JsonResult saveInfo(@RequestBody PublishJob publishJob){
+        logger.info("新增发布职位信息{}",publishJob);
+        if(publishJob == null){
             return new JsonResult(ResultStatusCode.NOT_NULL);
         }
-        logger.info("注册招聘者用户信息，姓名为{}",boss.getUsername());
-        Boss bossSave = bossService.saveOrUpdateBossInfo(boss);
-        return new JsonResult(ResultStatusCode.SUCCESS,bossSave);
+        publishJobService.saveInfo(publishJob);
+
+        return new JsonResult(ResultStatusCode.SUCCESS);
     }
 
 }

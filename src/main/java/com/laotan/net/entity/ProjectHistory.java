@@ -26,7 +26,7 @@ import java.time.LocalDate;
 @TableName("tb_project_history")
 public class ProjectHistory extends BaseEntity {
 
-    @ApiModelProperty(value = "项目名称")
+    @ApiModelProperty(value = "用户id")
     private Integer userId;
 
     @ApiModelProperty(value = "项目名称")

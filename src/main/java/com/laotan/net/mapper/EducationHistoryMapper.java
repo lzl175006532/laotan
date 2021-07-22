@@ -1,4 +1,4 @@
-package com.laotan.net.controller.mapper;
+package com.laotan.net.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.laotan.net.entity.EducationHistory;

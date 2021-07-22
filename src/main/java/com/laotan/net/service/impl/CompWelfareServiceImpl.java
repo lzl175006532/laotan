@@ -1,7 +1,7 @@
 package com.laotan.net.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.laotan.net.controller.mapper.CompWelfareMapper;
+import com.laotan.net.mapper.CompWelfareMapper;
 import com.laotan.net.entity.CompWelfare;
 import com.laotan.net.service.CompWelfareService;
 import org.slf4j.Logger;

@@ -55,7 +55,7 @@ public class UserController {
     @PostMapping(value = "/selectUserInfoByCellPhone")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "cellPhone", value = "手机号", dataType = "String", required = true, defaultValue = ""),
-            @ApiImplicitParam(name = "loginType", value = "0-应聘者登录，1-boss登录", dataType = "String", required = true, defaultValue = "")
+            @ApiImplicitParam(name = "loginType", value = "USER-应聘者登录，BOSS-boss登录", dataType = "String", required = true, defaultValue = "")
     })
     public JsonResult selectUserInfoByCellPhone(String cellPhone) throws Exception {
         logger.info("手机号{}开始登录",cellPhone);

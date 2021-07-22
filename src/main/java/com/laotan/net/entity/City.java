@@ -12,20 +12,22 @@ import lombok.experimental.Accessors;
  * @Copyright: 通泰信诚
  * @Author: lizilong
  * @Since: 2021/5/19 15:10
- * @Description:企业相册表
+ * @Description: 城市表
  */
 @Data
 @Accessors(chain = true)
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
-@ApiModel(value="CompImg对象", description="企业相册表")
-@TableName(value = "tb_comp_img")
-public class CompImg extends BaseEntity{
+@ApiModel(value="City对象", description="城市表")
+@TableName(value = "tb_city")
+public class City extends BaseEntity{
 
-    @ApiModelProperty(value = "图片地址")
-    private String url ;
+    @ApiModelProperty(value = "父级id")
+    private Integer pid ;
 
-    @ApiModelProperty(value = "所属公司id")
-    private Integer compId ;
+    @ApiModelProperty(value = "城市名称")
+    private String cityname ;
 
+    @ApiModelProperty(value = "层级")
+    private Integer type;
 
 }

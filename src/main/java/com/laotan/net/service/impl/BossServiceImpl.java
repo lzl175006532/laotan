@@ -2,7 +2,7 @@ package com.laotan.net.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.laotan.net.controller.mapper.BossMapper;
+import com.laotan.net.mapper.BossMapper;
 import com.laotan.net.entity.Boss;
 import com.laotan.net.entity.CompImg;
 import com.laotan.net.entity.CompWelfare;

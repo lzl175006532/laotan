@@ -1,8 +1,7 @@
 package com.laotan.net.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.laotan.net.controller.mapper.AccountMapper;
-import com.laotan.net.controller.mapper.CompImgMapper;
+import com.laotan.net.mapper.CompImgMapper;
 import com.laotan.net.entity.CompImg;
 import com.laotan.net.service.CompImgService;
 import org.slf4j.Logger;
