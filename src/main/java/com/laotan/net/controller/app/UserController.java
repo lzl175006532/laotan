@@ -47,8 +47,8 @@ public class UserController {
             return new JsonResult(ResultStatusCode.NOT_NULL);
         }
         logger.info("保存或更新用户注册简历信息，姓名为{}",user.getUsername());
-        userService.saveOrUpdateInfo(user);
-        return new JsonResult(ResultStatusCode.SUCCESS);
+        User userDB = userService.saveOrUpdateInfo(user);
+        return new JsonResult(ResultStatusCode.SUCCESS,userDB);
     }
 
     @ApiOperation(value="根据手机号获取用户信息", notes="根据手机号获取用户信息")

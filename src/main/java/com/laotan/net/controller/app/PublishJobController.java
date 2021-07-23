@@ -1,5 +1,7 @@
 package com.laotan.net.controller.app;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.laotan.net.common.CommenEnum;
 import com.laotan.net.common.JsonResult;
 import com.laotan.net.common.ResultStatusCode;
@@ -7,6 +9,7 @@ import com.laotan.net.entity.PublishJob;
 import com.laotan.net.service.AccountService;
 import com.laotan.net.service.PublishJobService;
 import com.laotan.net.service.UserService;
+import com.laotan.net.vo.SearchJobVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -58,6 +61,22 @@ public class PublishJobController {
         publishJobService.saveInfo(publishJob);
 
         return new JsonResult(ResultStatusCode.SUCCESS);
+    }
+
+    @ApiOperation(value="职位信息列表页面", notes="职位信息列表页面")
+    @PostMapping(value = "/selectJobList")
+    @ApiImplicitParams({
+//            @ApiImplicitParam(name = "keyword", value = "关键字查询，支持职位和公司", dataType = "String", required = true, defaultValue = ""),
+//            @ApiImplicitParam(name = "verifyCode", value = "短信验证码", dataType = "String", required = true, defaultValue = "")
+    })
+    public JsonResult selectJobList(@RequestBody SearchJobVO searchJobVO){
+        logger.info("查询职位信息{}",searchJobVO);
+        if(searchJobVO == null){
+            return new JsonResult(ResultStatusCode.NOT_NULL);
+        }
+        IPage<PublishJob> iPage = publishJobService.selectJobList(searchJobVO);
+
+        return new JsonResult(ResultStatusCode.SUCCESS,iPage);
     }
 
 }

@@ -1,6 +1,7 @@
 package com.laotan.net.entity;
 
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.annotations.ApiModel;
@@ -24,13 +25,20 @@ public class Account extends BaseEntity{
     @ApiModelProperty(value = "用户手机号(账号)")
     private String cellPhone ;
 
-    @ApiModelProperty(value = "登录类型（USER-应聘者登录，BOSS-boss登录）")
-    private String loginType ;
-
     @ApiModelProperty(value = "短信验证码")
     private String verifyCode;
 
+    @ApiModelProperty(value = "盐")
+    private String salt;
+
+    @ApiModelProperty(value = "密码")
+    private String password;
+
     @ApiModelProperty(value = "状态")
     private String status;
+
+    @TableField(exist = false)
+    @ApiModelProperty(value = "登录类型（PASSWORD-手机号密码登录，VERIFYCODE-手机号验证码登录）")
+    private String type;
 
 }

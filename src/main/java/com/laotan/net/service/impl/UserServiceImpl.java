@@ -74,7 +74,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                 educationHistoryService.saveBatch(educationHistoryList);
             }
         }
-        return null;
+        return user;
     }
 
     @Override
@@ -90,8 +90,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if(id == null || id == 0){
             return this.saveUserInfo(user);
         }else{
+            User userDB = super.getById(id);
             if(!StringUtils.isEmpty(user.getAdvantage())){
-                User userDB = super.getById(id);
                 userDB.setAdvantage(user.getAdvantage());
                 super.updateById(userDB);
             }
@@ -104,6 +104,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                     jobIntention.setUserId(user.getId());
                 }
                 jobIntentionService.saveBatch(jobIntentionList);
+                userDB.setJobIntentionList(jobIntentionList);
             }
             //更新工作经历
             List<WorkHistory> workHistoryList = user.getWorkHistoryList();
@@ -114,6 +115,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                     workHistory.setUserId(user.getId());
                 }
                 workHistoryService.saveBatch(workHistoryList);
+                userDB.setWorkHistoryList(workHistoryList);
             }
             //更新项目经历
             List<ProjectHistory> projectHistoryList = user.getProjectHistoryList();
@@ -124,6 +126,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                     projectHistory.setUserId(user.getId());
                 }
                 projectHistoryService.saveBatch(projectHistoryList);
+                userDB.setProjectHistoryList(projectHistoryList);
             }
             //更新教育经历
             List<EducationHistory> educationHistoryList = user.getEducationHistoryList();
@@ -134,9 +137,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                     educationHistory.setUserId(user.getId());
                 }
                 educationHistoryService.saveBatch(educationHistoryList);
+                userDB.setEducationHistoryList(educationHistoryList);
             }
+            return userDB;
         }
-        return super.getById(id);
     }
 
 }

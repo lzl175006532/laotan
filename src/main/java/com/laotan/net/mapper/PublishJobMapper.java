@@ -1,6 +1,8 @@
 package com.laotan.net.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.laotan.net.entity.PublishJob;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
@@ -29,5 +31,5 @@ public interface PublishJobMapper extends BaseMapper<PublishJob> {
             "</foreach>" +
             "</if>" +
             "</script>")
-    List<PublishJob> selectJobByJobIntentionNameList(List<String> jobIntentionNameList);
+    IPage<PublishJob> selectJobByJobIntentionNameList(Page page, List<String> jobIntentionNameList);
 }

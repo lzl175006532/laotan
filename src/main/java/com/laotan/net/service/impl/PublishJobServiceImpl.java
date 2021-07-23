@@ -1,5 +1,8 @@
 package com.laotan.net.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.laotan.net.common.CommenEnum;
 import com.laotan.net.common.ResultStatusCode;
@@ -7,10 +10,12 @@ import com.laotan.net.mapper.PublishJobMapper;
 import com.laotan.net.entity.*;
 import com.laotan.net.handleException.CustomException;
 import com.laotan.net.service.*;
+import com.laotan.net.vo.SearchJobVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -45,8 +50,15 @@ public class PublishJobServiceImpl extends ServiceImpl<PublishJobMapper, Publish
     }
 
     @Override
-    public List<PublishJob> selectJobByCellPhone(String cellPhone, String identity) {
-        List<PublishJob> publishJobList = new ArrayList<>();
+    public IPage<PublishJob> selectJobByCellPhone(SearchJobVO searchJobVO) {
+        String identity = searchJobVO.getIdentity();
+        String cellPhone = searchJobVO.getCellPhone();
+        String compName = searchJobVO.getCompName();
+        String jobName = searchJobVO.getJobName();
+        Integer city = searchJobVO.getCityId();
+        Page page = searchJobVO.getPage();
+        IPage<PublishJob> publishJobIPage = null;
+
         //应聘者查询职位列表
         if(CommenEnum.USER.equals(identity)){
             //根据应聘者求职意向查询职位信息集合
@@ -54,21 +66,36 @@ public class PublishJobServiceImpl extends ServiceImpl<PublishJobMapper, Publish
             if(user == null){
                 throw new CustomException(ResultStatusCode.ACCOUNT_USER_NOT_EXIST);
             }
-            List<JobIntention> jobIntentionList = jobIntentionService.selectByUserId(user.getId());
-            List<String> jobIntentionNameList = new ArrayList<>();
-            if(jobIntentionList != null && jobIntentionList.size() > 0){
-                for (JobIntention jobIntention:jobIntentionList) {
-                    jobIntentionNameList.add(jobIntention.getExpectJobName());
+            //如果查询条件compName和jobName都为空则根据用户简历中期望职位来推荐职位信息
+            if(StringUtils.isEmpty(compName) && StringUtils.isEmpty(jobName)){
+                List<JobIntention> jobIntentionList = jobIntentionService.selectByUserId(user.getId());
+                List<String> jobIntentionNameList = new ArrayList<>();
+                if(jobIntentionList != null && jobIntentionList.size() > 0){
+                    for (JobIntention jobIntention:jobIntentionList) {
+                        jobIntentionNameList.add(jobIntention.getExpectJobName());
+                    }
                 }
+                publishJobIPage = publishJobMapper.selectJobByJobIntentionNameList(page,jobIntentionNameList);
+            }else{
+                //根据用户筛选条件筛选:城市、职位
+                LambdaQueryWrapper<PublishJob> queryWrapper = new LambdaQueryWrapper();
+                queryWrapper.like(PublishJob::getJobName,jobName);
+                // TODO: 2021/7/23 城市处理
+                publishJobIPage = publishJobMapper.selectPage(page, queryWrapper);
             }
-            publishJobList = publishJobMapper.selectJobByJobIntentionNameList(jobIntentionNameList);
+
         }
         //招聘者查询发布职位列表
         if(CommenEnum.BOSS.equals(identity)){
             //根据HR手机号查询已发布的职位信息
             Boss boss = bossService.selectUserInfoByCellPhone(cellPhone);
-            publishJobList = publishJobMapper.selectJobByBossId(boss.getId());
+            publishJobMapper.selectJobByBossId(boss.getId());
         }
-        return publishJobList;
+        return null;
+    }
+
+    @Override
+    public IPage<PublishJob> selectJobList(SearchJobVO searchJobVO) {
+        return null;
     }
 }
