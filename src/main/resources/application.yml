@@ -1,6 +1,6 @@
 spring:
   redis:
-    host: 192.168.31.72
+    host: 35.220.214.154
     port: 6379
     password: Admin@123
     timeout: 60000
@@ -16,11 +16,11 @@ spring:
         # 从连接池中获取连接最大等待时间（默认为-1，单位为毫秒，负数表示无限）
         max-wait: -1
   application:
-    name: authentication
+    name: laotan
   datasource:
     username: root
     password: Admin@123
-    url: jdbc:mysql://192.168.31.72:3306/laotan?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true&zeroDateTimeBehavior=convertToNull&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://35.220.214.154:3306/laotan?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true&zeroDateTimeBehavior=convertToNull&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
     driverClassName: com.mysql.cj.jdbc.Driver
 
 #      durid:

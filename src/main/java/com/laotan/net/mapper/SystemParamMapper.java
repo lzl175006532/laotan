@@ -24,7 +24,7 @@ public interface SystemParamMapper extends BaseMapper<SystemParam> {
      * @param page
      * @return
      */
-    @Select("select * from system_param ")
+    @Select("select * from tb_system_param ")
     IPage<SystemParam> pageSelectList(Page page);
 
     /**
@@ -32,8 +32,8 @@ public interface SystemParamMapper extends BaseMapper<SystemParam> {
     * @Author: lzl
     * @Date: 2019/10/29
     **/
-    @Select("select param_value from system_param where param_name = #{paramName}")
-    String selectByParamKey(@Param("paramName") String paramName);
+    @Select("select PARAM_VALUE from tb_system_param where PARAM_NAME = #{paramName} and type = #{type}")
+    String selectByParamKey(@Param("paramName") String paramName,@Param("type") String type);
 
     /**
      * 根据key修改value

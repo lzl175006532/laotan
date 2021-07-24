@@ -9,6 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.laotan</groupId>
+    <packaging>war</packaging>
     <artifactId>net</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>net</name>
