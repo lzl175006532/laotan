@@ -1,9 +1,11 @@
 package com.laotan.net.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.laotan.net.entity.Job;
 import com.laotan.net.mapper.SystemParamMapper;
 import com.laotan.net.entity.SystemParam;
 import com.laotan.net.service.SystemParamService;
@@ -68,7 +70,14 @@ public class SystemParamServiceImpl extends ServiceImpl<SystemParamMapper, Syste
     }
 
     @Override
-    public String selectByParamKey(String paramName) {
-        return systemParamMapper.selectByParamKey(paramName);
+    public String selectByParamKey(String paramName,String type) {
+        return systemParamMapper.selectByParamKey(paramName,type);
+    }
+
+    @Override
+    public List<SystemParam> selectByType(String type) {
+        LambdaQueryWrapper<SystemParam> queryWrapper = new LambdaQueryWrapper();
+        queryWrapper.eq(SystemParam::getType,type);
+        return systemParamMapper.selectList(queryWrapper);
     }
 }

@@ -14,6 +14,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * <p>
  * 用户表 服务实现类
@@ -33,5 +35,12 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements JobSe
     @Override
     public Job selectByCode(String code) {
         return jobMapper.selectByCode(code);
+    }
+
+    @Override
+    public List<Job> selectByParentId(String parentId) {
+        LambdaQueryWrapper<Job> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Job::getParentId,parentId);
+        return jobMapper.selectList(queryWrapper);
     }
 }

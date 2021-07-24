@@ -3,6 +3,7 @@ package com.laotan.net.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.laotan.net.entity.Job;
 import com.laotan.net.entity.SystemParam;
 
 import java.util.List;
@@ -68,5 +69,10 @@ public interface SystemParamService extends IService<SystemParam> {
     * @Author: lzl
     * @Date: 2019/10/29
     **/
-    String selectByParamKey(String paramName);
+    String selectByParamKey(String paramName,String type);
+
+    /*
+    根据类型查询列表集合
+     */
+    List<SystemParam> selectByType(String type);
 }

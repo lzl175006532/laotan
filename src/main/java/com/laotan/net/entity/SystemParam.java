@@ -38,6 +38,6 @@ public class SystemParam extends BaseEntity {
     private String type;
 
     @ApiModelProperty(value = "备注说明")
-    private String dtail;
+    private String detail;
 
 }
