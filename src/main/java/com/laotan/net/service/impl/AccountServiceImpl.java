@@ -3,6 +3,7 @@ package com.laotan.net.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.laotan.net.common.MD5Util;
+import com.laotan.net.common.TokenUtil;
 import com.laotan.net.mapper.AccountMapper;
 import com.laotan.net.entity.*;
 import com.laotan.net.service.*;
@@ -38,16 +39,15 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
     }
 
     @Override
-    public Boolean login(String cellPhone , String verifyCode,String password,String type) {
+    public Account login(String cellPhone , String verifyCode,String password,String type) {
         Account accountDB = this.findByCellPhone(cellPhone);
         if(accountDB == null){
             //新用户，需要注册
             accountDB = new Account();
             accountDB.setCellPhone(cellPhone);
             accountDB.setCreateTime(LocalDateTime.now());
-            accountDB = MD5Util.getMD5Str2Account(accountDB);
             super.save(accountDB);
-            return true;
+            return accountDB;
         }
 
         if("PASSWORD".equals(type)){
@@ -55,32 +55,43 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
             String salt = accountDB.getSalt();
             String md5Str = MD5Util.getMD5Str(password+salt);
             if(accountDB != null && accountDB.getPassword().equals(md5Str)){
-                return true;
+                return accountDB;
             }else{
-                return false;
+                return null;
             }
         }else{
             //短信验证码方式
             // TODO: 2021/7/23
         }
-        return null;
+        return accountDB;
     }
 
     @Override
     public Account setPassword(String cellPhone, String password) {
         Account accountDB = this.findByCellPhone(cellPhone);
         if(accountDB == null){
-            //新注册用户
-            accountDB = new Account();
-            accountDB.setCellPhone(cellPhone);
-            accountDB.setCreateTime(LocalDateTime.now());
-        }else{
-            //数据库已存在用户
-            accountDB.setUpdateTime(LocalDateTime.now());
+            return null;
         }
+        //第一次设置密码，需要把用户输入新密码设置进去，后续进行md5加密
+        accountDB.setPassword(password);
+        accountDB.setUpdateTime(LocalDateTime.now());
         //设置密码
         accountDB = MD5Util.getMD5Str2Account(accountDB);
         super.saveOrUpdate(accountDB);
         return accountDB;
+    }
+
+    @Override
+    public Account selectByCellPhone(String cellPhone) {
+        LambdaQueryWrapper<Account> queryWrapper = new LambdaQueryWrapper();
+        queryWrapper.eq(Account::getCellPhone,cellPhone);
+        Account account = accountMapper.selectOne(queryWrapper);
+        return account;
+    }
+
+    @Override
+    public Account selectByToken(String token) {
+        Integer id = TokenUtil.getAccoutIdByToken(token);
+        return super.getById(id);
     }
 }

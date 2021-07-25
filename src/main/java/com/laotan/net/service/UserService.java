@@ -43,4 +43,9 @@ public interface UserService extends IService<User> {
      * @Description: 保存或更新用户注册简历信息,如果是修改：修改哪个哪个不为空，并且id不为空，其他为空即可
      */
     User saveOrUpdateInfo(User user);
+
+    /*
+    根据token获取用户信息
+     */
+    User selectUserInfoByToken(String token);
 }

@@ -3,6 +3,8 @@ package com.laotan.net.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.laotan.net.entity.WorkHistory;
 
+import java.util.List;
+
 /**
  * <p>
  * 用户表 服务类
@@ -14,5 +16,13 @@ import com.laotan.net.entity.WorkHistory;
 public interface WorkHistoryService extends IService<WorkHistory> {
 
 
+    /*
+    根据用户id删除
+     */
     Integer deleteByUserId(Integer userId);
+
+    /*
+    根据用户id查询
+     */
+    List<WorkHistory> selectByUserId(Integer userId);
 }

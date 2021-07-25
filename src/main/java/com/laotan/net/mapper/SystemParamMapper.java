@@ -32,7 +32,7 @@ public interface SystemParamMapper extends BaseMapper<SystemParam> {
     * @Author: lzl
     * @Date: 2019/10/29
     **/
-    @Select("select PARAM_VALUE from tb_system_param where PARAM_NAME = #{paramName} and type = #{type}")
+    @Select("<script>select PARAM_VALUE from tb_system_param where PARAM_NAME = #{paramName}<if test = 'type != null and \"\" !=type' > and type = #{type}</if></script>")
     String selectByParamKey(@Param("paramName") String paramName,@Param("type") String type);
 
     /**

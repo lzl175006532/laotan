@@ -41,6 +41,8 @@ public class PublishJobServiceImpl extends ServiceImpl<PublishJobMapper, Publish
     private JobIntentionService jobIntentionService;
     @Autowired
     private BossService bossService;
+    @Autowired
+    private CityService cityService;
 
     @Override
     public Boolean saveInfo(PublishJob publishJob) {
@@ -55,7 +57,13 @@ public class PublishJobServiceImpl extends ServiceImpl<PublishJobMapper, Publish
         String cellPhone = searchJobVO.getCellPhone();
         String compName = searchJobVO.getCompName();
         String jobName = searchJobVO.getJobName();
-        Integer city = searchJobVO.getCityId();
+        Integer cityId = searchJobVO.getCityId();
+        City city = cityService.getById(cityId);
+        if(city == null){
+            //默认背景
+            city = new City();
+            city.setCityname("北京");
+        }
         Page page = searchJobVO.getPage();
         IPage<PublishJob> publishJobIPage = null;
 
@@ -80,7 +88,7 @@ public class PublishJobServiceImpl extends ServiceImpl<PublishJobMapper, Publish
                 //根据用户筛选条件筛选:城市、职位
                 LambdaQueryWrapper<PublishJob> queryWrapper = new LambdaQueryWrapper();
                 queryWrapper.like(PublishJob::getJobName,jobName);
-                // TODO: 2021/7/23 城市处理
+                queryWrapper.like(PublishJob::getAddress,city.getCityname());
                 publishJobIPage = publishJobMapper.selectPage(page, queryWrapper);
             }
 
@@ -89,9 +97,9 @@ public class PublishJobServiceImpl extends ServiceImpl<PublishJobMapper, Publish
         if(CommenEnum.BOSS.equals(identity)){
             //根据HR手机号查询已发布的职位信息
             Boss boss = bossService.selectUserInfoByCellPhone(cellPhone);
-            publishJobMapper.selectJobByBossId(boss.getId());
+            publishJobIPage = publishJobMapper.selectJobByBossId(page,boss.getId());
         }
-        return null;
+        return publishJobIPage;
     }
 
     @Override

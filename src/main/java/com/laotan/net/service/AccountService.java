@@ -24,7 +24,7 @@ public interface AccountService extends IService<Account> {
      * @Return: com.laotan.net.entity.User
      * @Description: 手机号登录
      */
-    Boolean login(String cellPhone , String verifyCode,String password,String type);
+    Account login(String cellPhone , String verifyCode,String password,String type);
 
     /**
      * @Copyright: 通泰信诚
@@ -35,4 +35,14 @@ public interface AccountService extends IService<Account> {
      * @Description: 设置密码
      */
     Account setPassword(String cellPhone, String password);
+
+    /*
+    根据手机号查询账号信息
+     */
+    Account selectByCellPhone(String cellPhone);
+
+    /*
+    根据手机号查询账号信息
+     */
+    Account selectByToken(String token);
 }

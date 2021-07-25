@@ -10,6 +10,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * <p>
  * 用户表 服务实现类
@@ -31,5 +33,13 @@ public class ProjectHistoryServiceImpl extends ServiceImpl<ProjectHistoryMapper,
         wrapper.eq(ProjectHistory :: getUserId,userId);
         int delete = projectHistoryMapper.delete(wrapper);
         return delete;
+    }
+
+    @Override
+    public List<ProjectHistory> selectByUserId(Integer userId) {
+        LambdaQueryWrapper<ProjectHistory> wrapper = new LambdaQueryWrapper();
+        wrapper.eq(ProjectHistory :: getUserId,userId);
+        List<ProjectHistory> projectHistories = projectHistoryMapper.selectList(wrapper);
+        return projectHistories;
     }
 }

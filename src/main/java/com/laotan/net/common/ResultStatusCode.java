@@ -49,6 +49,8 @@ public enum ResultStatusCode {
     END_TIME_OUT(10039,"结束时间已超时，无法进行该操作"),
     ACCOUNT_STATUS_ERROR(10040,"此账号已被禁用，请联系管理员"),
 
+    DONT_MESS_ABOUT(10041,"别瞎搞，乱传什么参数？？？"),
+
     NO_PERMISSIONS(20000,"没有权限"),
 
     ZHONGJI(999999,"限制最后节点");

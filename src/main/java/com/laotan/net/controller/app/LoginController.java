@@ -4,14 +4,9 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.laotan.net.common.CommenEnum;
 import com.laotan.net.common.JsonResult;
 import com.laotan.net.common.ResultStatusCode;
-import com.laotan.net.entity.Account;
-import com.laotan.net.entity.Company;
-import com.laotan.net.entity.PublishJob;
-import com.laotan.net.entity.User;
-import com.laotan.net.service.AccountService;
-import com.laotan.net.service.CompanyService;
-import com.laotan.net.service.PublishJobService;
-import com.laotan.net.service.UserService;
+import com.laotan.net.common.TokenUtil;
+import com.laotan.net.entity.*;
+import com.laotan.net.service.*;
 import com.laotan.net.vo.SearchJobVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -49,6 +44,8 @@ public class LoginController {
     private PublishJobService publishJobService;
     @Autowired
     private CompanyService companyService;
+    @Autowired
+    private UserTokenService userTokenService;
 
     /**
      * @Copyright: 通泰信诚
@@ -71,10 +68,21 @@ public class LoginController {
         if(StringUtils.isEmpty(cellPhone) || StringUtils.isEmpty(type) || (StringUtils.isEmpty(password) && StringUtils.isEmpty(verifyCode))){
             return new JsonResult(ResultStatusCode.NOT_NULL);
         }
-        accountService.login(cellPhone,verifyCode,password,type);
-
+        if(!"PASSWORD".equals(type) && !"VERIFYCODE".equals(type)){
+            return new JsonResult(ResultStatusCode.DONT_MESS_ABOUT);
+        }
+        Account accountDB = accountService.login(cellPhone, verifyCode, password, type);
+        if(accountDB == null){
+            return new JsonResult(ResultStatusCode.DB_RESOURCE_NULL.getCode(),"用户不存在或密码不正确");
+        }
+        //增加token逻辑
+        String userToken = userTokenService.createUserToken(accountDB);
+        boolean b = accountService.updateById(accountDB);
+        if(!b){
+            return new JsonResult(ResultStatusCode.FAIL_OPERATION.getCode(),"保存token失败");
+        }
         logger.info("{}登录结束，验证码为{}",cellPhone,verifyCode);
-        return new JsonResult(ResultStatusCode.SUCCESS);
+        return new JsonResult(ResultStatusCode.SUCCESS,accountDB);
     }
 
     @ApiOperation(value="手机验证码登录注册之后设置密码", notes="手机验证码登录注册之后设置密码")
@@ -89,7 +97,9 @@ public class LoginController {
             return new JsonResult(ResultStatusCode.NOT_NULL);
         }
         Account account = accountService.setPassword(cellPhone,password);
-
+        if(account == null){
+            return new JsonResult(ResultStatusCode.DB_RESOURCE_NULL);
+        }
         logger.info("{}设置密码成功",cellPhone);
         return new JsonResult(ResultStatusCode.SUCCESS,account);
     }

@@ -28,6 +28,9 @@ public class SearchJobVO {
     @ApiModelProperty(value = "手机号")
     private String cellPhone;
 
+    @ApiModelProperty(value = "登录token")
+    private String token;
+
     @ApiModelProperty(value = "用户身份（USER-应聘者，BOSS-招聘者）")
     private String identity;
 

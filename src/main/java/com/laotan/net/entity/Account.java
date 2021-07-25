@@ -28,7 +28,7 @@ public class Account extends BaseEntity{
     @ApiModelProperty(value = "短信验证码")
     private String verifyCode;
 
-    @ApiModelProperty(value = "盐")
+    @ApiModelProperty(value = "密码盐")
     private String salt;
 
     @ApiModelProperty(value = "密码")
@@ -36,6 +36,15 @@ public class Account extends BaseEntity{
 
     @ApiModelProperty(value = "状态")
     private String status;
+
+    @ApiModelProperty(value = "应聘者信息完善状态，默认为N，表示应聘者没有完善简历，如果为Y表示简历已经创建完成")
+    private String userInitInfo;
+
+    @ApiModelProperty(value = "招聘者信息完善状态，默认为N，表示招聘者没有完善简历，如果为Y表示公司信息已经完成")
+    private String bossInitInfo;
+
+    @ApiModelProperty(value = "登录成功之后生成token")
+    private String token;
 
     @TableField(exist = false)
     @ApiModelProperty(value = "登录类型（PASSWORD-手机号密码登录，VERIFYCODE-手机号验证码登录）")

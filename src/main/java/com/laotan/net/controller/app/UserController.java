@@ -2,7 +2,9 @@ package com.laotan.net.controller.app;
 
 import com.laotan.net.common.JsonResult;
 import com.laotan.net.common.ResultStatusCode;
+import com.laotan.net.entity.Account;
 import com.laotan.net.entity.User;
+import com.laotan.net.service.AccountService;
 import com.laotan.net.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -31,6 +33,8 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private AccountService accountService;
 
     /**
      * @Copyright: 通泰信诚
@@ -43,26 +47,34 @@ public class UserController {
     @ApiOperation(value="保存或更新用户注册简历信息,如果是修改：修改哪个哪个不为空，并且id不为空，其他为空即可", notes="保存或更新用户注册简历信息,如果是修改：修改哪个哪个不为空，并且id不为空，其他为空即可")
     @PostMapping(value = "/saveOrUpdateInfo")
     public JsonResult saveOrUpdateInfo(@RequestBody User user) {
-        if(user == null){
+        if(user == null || StringUtils.isEmpty(user.getLoginCellPhone())){
             return new JsonResult(ResultStatusCode.NOT_NULL);
         }
+        String cellPhone = user.getLoginCellPhone();
+        Account account = accountService.selectByCellPhone(cellPhone);
+        if(account == null){
+            return new JsonResult(ResultStatusCode.DB_RESOURCE_NULL.getCode(),"数据库中没有"+cellPhone+"账号信息");
+        }
         logger.info("保存或更新用户注册简历信息，姓名为{}",user.getUsername());
-        User userDB = userService.saveOrUpdateInfo(user);
-        return new JsonResult(ResultStatusCode.SUCCESS,userDB);
+        User saveUserDB = userService.saveOrUpdateInfo(user);
+        return new JsonResult(ResultStatusCode.SUCCESS,saveUserDB);
     }
 
-    @ApiOperation(value="根据手机号获取用户信息", notes="根据手机号获取用户信息")
+    @ApiOperation(value="根据token获取用户信息", notes="根据token获取用户信息")
     @PostMapping(value = "/selectUserInfoByCellPhone")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "cellPhone", value = "手机号", dataType = "String", required = true, defaultValue = ""),
             @ApiImplicitParam(name = "loginType", value = "USER-应聘者登录，BOSS-boss登录", dataType = "String", required = true, defaultValue = "")
     })
-    public JsonResult selectUserInfoByCellPhone(String cellPhone) throws Exception {
-        logger.info("手机号{}开始登录",cellPhone);
-        if(StringUtils.isEmpty(cellPhone)){
+    public JsonResult selectUserInfoByToken(String token) throws Exception {
+        logger.info("根据token:{}获取用户信息",token);
+        if(StringUtils.isEmpty(token)){
             return new JsonResult(ResultStatusCode.NOT_NULL);
         }
-        User userDB = userService.selectUserInfoByCellPhone(cellPhone);
+        User userDB = userService.selectUserInfoByToken(token);
+        if(userDB == null){
+            return new JsonResult(ResultStatusCode.DB_RESOURCE_NULL.getCode(),"token无效或数据库无资源");
+        }
         return new JsonResult(ResultStatusCode.SUCCESS,userDB);
     }
 

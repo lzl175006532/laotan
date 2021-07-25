@@ -21,7 +21,7 @@ import java.util.List;
 public interface PublishJobMapper extends BaseMapper<PublishJob> {
 
     @Select("select * from tb_publish_job where boss_id = #{bossId}")
-    List<PublishJob> selectJobByBossId(Integer bossId);
+    IPage<PublishJob> selectJobByBossId(Page page,Integer bossId);
 
     @Select("<script>select * from tb_publish_job  " +
             "<if test = 'jobIntentionNameList != null'>" +

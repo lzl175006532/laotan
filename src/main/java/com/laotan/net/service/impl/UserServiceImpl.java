@@ -2,6 +2,7 @@ package com.laotan.net.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.laotan.net.common.TokenUtil;
 import com.laotan.net.mapper.UserMapper;
 import com.laotan.net.entity.*;
 import com.laotan.net.service.*;
@@ -35,6 +36,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private ProjectHistoryService projectHistoryService;
     @Autowired
     private EducationHistoryService educationHistoryService;
+    @Autowired
+    private AccountService accountService;
 
 
     @Override
@@ -74,6 +77,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                 educationHistoryService.saveBatch(educationHistoryList);
             }
         }
+        //根据手机号查询账号表，设置账号为已完善简历信息
+        String cellPhone = user.getCellPhone();
+        Account account = accountService.selectByCellPhone(cellPhone);
+        account.setUserInitInfo("Y");
+        accountService.updateById(account);
         return user;
     }
 
@@ -81,7 +89,20 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public User selectUserInfoByCellPhone(String cellPhone) {
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper();
         wrapper.eq(User :: getCellPhone,cellPhone);
-        return userMapper.selectOne(wrapper);
+        User user = userMapper.selectOne(wrapper);
+        //查询求职意向
+        List<JobIntention> jobIntentionList = jobIntentionService.selectByUserId(user.getId());
+        user.setJobIntentionList(jobIntentionList);
+        //工作经历
+        List<WorkHistory> workHistories = workHistoryService.selectByUserId(user.getId());
+        user.setWorkHistoryList(workHistories);
+        //项目经历
+        List<ProjectHistory> projectHistories = projectHistoryService.selectByUserId(user.getId());
+        user.setProjectHistoryList(projectHistories);
+        //教育经历
+        List<EducationHistory> educationHistories = educationHistoryService.selectByUserId(user.getId());
+        user.setEducationHistoryList(educationHistories);
+        return user;
     }
 
     @Override
@@ -141,6 +162,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             }
             return userDB;
         }
+    }
+
+    @Override
+    public User selectUserInfoByToken(String token) {
+        Account account = accountService.getById(TokenUtil.getAccoutIdByToken(token));
+        if(account == null){
+            return null;
+        }
+        User user = this.selectUserInfoByCellPhone(account.getCellPhone());
+        return user;
     }
 
 }

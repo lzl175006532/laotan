@@ -50,11 +50,11 @@ public class JobIntention extends BaseEntity {
     private String expectVocationName;
 
     @ApiModelProperty(value = "期望行业Id")
-    private String expectVocationId;
+    private Integer expectVocationId;
 
     @ApiModelProperty(value = "期望薪资名称")
     private String expectMoneyName;
 
     @ApiModelProperty(value = "期望薪资Id")
-    private String expectMoneyId;
+    private Integer expectMoneyId;
 }

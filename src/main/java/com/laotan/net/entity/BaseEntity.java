@@ -50,4 +50,8 @@ public class BaseEntity {
     @TableField(exist = false)
     private Integer loginUserId;
 
+    @ApiModelProperty(value = "登录类型：USER、BOSS")
+    @TableField(exist = false)
+    private String loginType;
+
 }
