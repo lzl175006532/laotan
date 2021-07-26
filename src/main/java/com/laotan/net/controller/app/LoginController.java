@@ -1,10 +1,8 @@
 package com.laotan.net.controller.app;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.laotan.net.common.CommenEnum;
 import com.laotan.net.common.JsonResult;
 import com.laotan.net.common.ResultStatusCode;
-import com.laotan.net.common.TokenUtil;
 import com.laotan.net.entity.*;
 import com.laotan.net.service.*;
 import com.laotan.net.vo.SearchJobVO;
@@ -21,8 +19,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @Copyright: 通泰信诚
@@ -106,10 +102,6 @@ public class LoginController {
 
     @ApiOperation(value="登录成功-进入首页：根据登录用户信息返回岗位列表", notes="登录成功-进入首页：选择身份（招聘者还是应聘者）返回岗位列表")
     @PostMapping(value = "/checkIdentity")
-    @ApiImplicitParams({
-//            @ApiImplicitParam(name = "cellPhone", value = "手机号", dataType = "String", required = true, defaultValue = ""),
-//            @ApiImplicitParam(name = "identity", value = "用户身份（USER-应聘者，BOSS-招聘者）", dataType = "String", required = true, defaultValue = "")
-    })
     public JsonResult checkIdentity(@RequestBody SearchJobVO searchJobVO){
         if(searchJobVO == null || StringUtils.isEmpty(searchJobVO.getCellPhone()) || StringUtils.isEmpty(searchJobVO.getIdentity()) ){
             return new JsonResult(ResultStatusCode.NOT_NULL);

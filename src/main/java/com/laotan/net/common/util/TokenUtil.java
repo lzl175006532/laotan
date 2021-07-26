@@ -1,6 +1,7 @@
-package com.laotan.net.common;
+package com.laotan.net.common.util;
 
 
+import com.laotan.net.common.util.DESUtil;
 import com.laotan.net.entity.Account;
 import org.springframework.util.StringUtils;
 

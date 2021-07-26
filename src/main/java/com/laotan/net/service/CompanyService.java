@@ -40,4 +40,34 @@ public interface CompanyService extends IService<Company> {
      * @Description: 根据名称模糊查询公司信息
      */
     IPage<Company> selectCompanyPage(Page page, String compName);
+
+    /**
+     * @Copyright: 通泰信诚
+     * @Author: lizilong
+     * @Since: 2021/7/26 17:48
+     * @Params: [compName]
+     * @Return: com.laotan.net.entity.Company
+     * @Description: 根据公司名称查询是否已在工商信息中注册
+     */
+    Company selectBycompName(String compName);
+
+    /**
+     * @Copyright: 通泰信诚
+     * @Author: lizilong
+     * @Since: 2021/7/26 18:00
+     * @Params: [company]
+     * @Return: com.laotan.net.entity.Company
+     * @Description: 保存或更新企业信息,如果是修改：修改哪个哪个不为空，并且id不为空，其他为空即可
+     */
+    Company saveOrUpdateCompInfo(Company company) throws Exception;
+
+    /**
+     * @Copyright: 通泰信诚
+     * @Author: lizilong
+     * @Since: 2021/7/26 19:59
+     * @Params: [compId]
+     * @Return: com.laotan.net.entity.Company
+     * @Description: 根据公司id查询公司详情
+     */
+    Company selectBycompId(Integer compId);
 }

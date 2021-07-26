@@ -2,12 +2,11 @@ package com.laotan.net.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.laotan.net.common.MD5Util;
-import com.laotan.net.common.TokenUtil;
+import com.laotan.net.common.util.MD5Util;
+import com.laotan.net.common.util.TokenUtil;
 import com.laotan.net.mapper.AccountMapper;
 import com.laotan.net.entity.*;
 import com.laotan.net.service.*;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

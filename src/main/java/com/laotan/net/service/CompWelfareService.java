@@ -3,6 +3,8 @@ package com.laotan.net.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.laotan.net.entity.CompWelfare;
 
+import java.util.List;
+
 /**
  * <p>
  * 用户表 服务类
@@ -23,4 +25,34 @@ public interface CompWelfareService extends IService<CompWelfare> {
      * @Description: 根据用户id删除
      */
     Integer deleteByUserId(Integer userId);
+
+    /**
+     * @Copyright: 通泰信诚
+     * @Author: lizilong
+     * @Since: 2021/7/26 18:53
+     * @Params: [welfareName, compId, type]
+     * @Return: com.laotan.net.entity.CompWelfare
+     * @Description: 为公司添加福利
+     */
+    CompWelfare addForCompany(String welfareName, Integer compId, String type);
+
+    /**
+     * @Copyright: 通泰信诚
+     * @Author: lizilong
+     * @Since: 2021/7/26 18:53
+     * @Params: [welfareName, compId, type]
+     * @Return: com.laotan.net.entity.CompWelfare
+     * @Description: 为公司删除福利
+     */
+    Integer delForCompany(String welfareName, Integer compId, String type);
+
+    /**
+     * @Copyright: 通泰信诚
+     * @Author: lizilong
+     * @Since: 2021/7/26 20:03
+     * @Params: [compId]
+     * @Return: java.util.List<com.laotan.net.entity.CompWelfare>
+     * @Description: 根据公司id查询
+     */
+    List<CompWelfare> selectByCompId(Integer compId);
 }

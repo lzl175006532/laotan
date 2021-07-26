@@ -2,11 +2,10 @@ package com.laotan.net.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.laotan.net.common.DESUtil;
+import com.laotan.net.common.util.DESUtil;
 import com.laotan.net.common.JsonResult;
 import com.laotan.net.common.ResultStatusCode;
 import com.laotan.net.entity.Account;
-import com.laotan.net.entity.User;
 import com.laotan.net.entity.UserToken;
 import com.laotan.net.mapper.UserTokenMapper;
 import com.laotan.net.service.AccountService;
@@ -57,12 +56,13 @@ public class UserTokenServiceImpl extends ServiceImpl<UserTokenMapper, UserToken
         if(userToken != null){
             LocalDateTime failureTime = userToken.getFailureTime();
             if(failureTime != null && failureTime.isAfter(LocalDateTime.now())){
-                //token为key,userCode为value，存入redis失效间隔时间，单位为秒
+                //token未过期：token为key,userCode为value，存入redis失效间隔时间，单位为秒
                 int liveSecond = StringUtils.isEmpty(time) ? 60*60*24 :Integer.parseInt(time);
                 Long failureSecond = LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8")) + liveSecond;
                 userToken.setFailureTime(LocalDateTime.ofEpochSecond(failureSecond,0, ZoneOffset.ofHours(8)));
+                account.setToken(userToken.getClientToken());
+                return userToken.getClientToken();
             }
-            return userToken.getClientToken();
         }else{
             userToken = new UserToken();
         }
@@ -96,6 +96,7 @@ public class UserTokenServiceImpl extends ServiceImpl<UserTokenMapper, UserToken
             userToken.setUpdateTime(LocalDateTime.now());
         }
         this.saveOrUpdate(userToken);
+        account.setToken(encrypt);
         return encrypt ;
     }
 
@@ -137,12 +138,17 @@ public class UserTokenServiceImpl extends ServiceImpl<UserTokenMapper, UserToken
     public JsonResult authToken(String clientToken) {
         if(StringUtils.isEmpty(clientToken)){
             logger.error("验证token方法authToken：参数为空");
-            return new JsonResult(ResultStatusCode.NOT_NULL.getCode(),"token不能为空");
+            return new JsonResult(ResultStatusCode.TOKEN_ERROR.getCode(),"token不能为空");
         }
         UserToken userToken = this.getByToken(clientToken);
         if(userToken == null){
             logger.error("验证token方法authToken：userToken不存在");
-            return new JsonResult(ResultStatusCode.DB_RESOURCE_NULL.getCode(),"token不存在");
+            return new JsonResult(ResultStatusCode.TOKEN_ERROR.getCode(),"token不存在");
+        }
+        LocalDateTime failureTime = userToken.getFailureTime();
+        if(failureTime != null && failureTime.isBefore(LocalDateTime.now())){
+            logger.error("验证token方法authToken：token已失效");
+            return new JsonResult(ResultStatusCode.TOKEN_ERROR.getCode(),"token已失效");
         }
         //1、解密token，对比account，是否为同一用户唯一token
         String decryptToken = "";//token解密结果
@@ -151,14 +157,15 @@ public class UserTokenServiceImpl extends ServiceImpl<UserTokenMapper, UserToken
         } catch (Exception e) {
             e.printStackTrace();
         }
+        Account account = new Account();
         try {
-            Account account = accountService.getById(Integer.parseInt(decryptToken));
+            account = accountService.getById(Integer.parseInt(decryptToken));
             if(account == null){
-                return new JsonResult(ResultStatusCode.DB_RESOURCE_NULL.getCode(),"非法token");
+                return new JsonResult(ResultStatusCode.TOKEN_ERROR.getCode(),"非法token");
             }
         }catch (Exception e){
             e.printStackTrace();
-            return new JsonResult(ResultStatusCode.DB_RESOURCE_NULL.getCode(),"非法token");
+            return new JsonResult(ResultStatusCode.TOKEN_ERROR.getCode(),"非法token");
         }
 
         //2、验证token：redis是否存在且没过期？如果redis没有，检查数据库是否存在且没过期，如果token有效，自动延长失效时间
@@ -182,6 +189,6 @@ public class UserTokenServiceImpl extends ServiceImpl<UserTokenMapper, UserToken
         Long failureSecond = LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8")) + liveSecond;
         userToken.setFailureTime(LocalDateTime.ofEpochSecond(failureSecond,0, ZoneOffset.ofHours(8)));
         this.updateById(userToken);
-        return new JsonResult(ResultStatusCode.SUCCESS);
+        return new JsonResult(ResultStatusCode.SUCCESS,account);
     }
 }

@@ -1,4 +1,4 @@
-package com.laotan.net.common;
+package com.laotan.net.common.util;
 
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.util.StringUtils;

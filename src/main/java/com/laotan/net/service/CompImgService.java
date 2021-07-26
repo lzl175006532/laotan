@@ -3,6 +3,8 @@ package com.laotan.net.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.laotan.net.entity.CompImg;
 
+import java.util.List;
+
 /**
  * <p>
  * 用户表 服务类
@@ -23,4 +25,14 @@ public interface CompImgService extends IService<CompImg> {
      * @Description: 根据用户id删除
      */
     Integer deleteByUserId(Integer userId);
+
+    /**
+     * @Copyright: 通泰信诚
+     * @Author: lizilong
+     * @Since: 2021/7/26 20:01
+     * @Params: [compId]
+     * @Return: java.util.List<com.laotan.net.entity.CompImg>
+     * @Description: 根据公司id查询
+     */
+    List<CompImg> selectByCompId(Integer compId);
 }

@@ -24,6 +24,9 @@ public class CompWelfare extends BaseEntity{
     @ApiModelProperty(value = "福利名称")
     private String name ;
 
+    @ApiModelProperty(value = "福利类型：自定义-CUSTOM，默认-DEFAULT")
+    private String type ;
+
     @ApiModelProperty(value = "所属公司id")
     private Integer compId ;
 }

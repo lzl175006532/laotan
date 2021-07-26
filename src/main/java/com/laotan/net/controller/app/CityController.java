@@ -1,6 +1,7 @@
 package com.laotan.net.controller.app;
 
 import com.laotan.net.common.JsonResult;
+import com.laotan.net.common.util.RedisUtils;
 import com.laotan.net.common.ResultStatusCode;
 import com.laotan.net.entity.City;
 import com.laotan.net.service.CityService;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -32,6 +34,8 @@ public class CityController {
 
     @Autowired
     private CityService cityService;
+    @Autowired
+    RedisUtils redisUtils;
 
     /**
      * @Copyright: 通泰信诚
@@ -46,10 +50,11 @@ public class CityController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "type", value = "城市层级类型", dataType = "int", required = false, defaultValue = "0")
     })
-    public JsonResult selectByType(Integer type){
+    public JsonResult selectByType(HttpServletRequest request,Integer type){
         if(StringUtils.isEmpty(type) ){
             return new JsonResult(ResultStatusCode.NOT_NULL);
         }
+
         List<City> cityList = cityService.selectByType(type);
         if(cityList == null){
             return new JsonResult(ResultStatusCode.DB_RESOURCE_NULL);

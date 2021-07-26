@@ -49,10 +49,6 @@ public class PublishJobController {
      */
     @ApiOperation(value="新增发布职位信息", notes="新增发布职位信息")
     @PostMapping(value = "/saveInfo")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "cellPhone", value = "手机号", dataType = "String", required = true, defaultValue = ""),
-            @ApiImplicitParam(name = "verifyCode", value = "短信验证码", dataType = "String", required = true, defaultValue = "")
-    })
     public JsonResult saveInfo(@RequestBody PublishJob publishJob){
         logger.info("新增发布职位信息{}",publishJob);
         if(publishJob == null){
@@ -65,10 +61,6 @@ public class PublishJobController {
 
     @ApiOperation(value="职位信息列表页面", notes="职位信息列表页面")
     @PostMapping(value = "/selectJobList")
-    @ApiImplicitParams({
-//            @ApiImplicitParam(name = "keyword", value = "关键字查询，支持职位和公司", dataType = "String", required = true, defaultValue = ""),
-//            @ApiImplicitParam(name = "verifyCode", value = "短信验证码", dataType = "String", required = true, defaultValue = "")
-    })
     public JsonResult selectJobList(@RequestBody SearchJobVO searchJobVO){
         logger.info("查询职位信息{}",searchJobVO);
         if(searchJobVO == null){
@@ -77,6 +69,23 @@ public class PublishJobController {
         IPage<PublishJob> iPage = publishJobService.selectJobList(searchJobVO);
 
         return new JsonResult(ResultStatusCode.SUCCESS,iPage);
+    }
+
+    @ApiOperation(value="职位信息列表页面", notes="职位信息列表页面")
+    @PostMapping(value = "/selectJobList")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "jobId", value = "职位id", dataType = "int", required = true, defaultValue = "")
+    })
+    public JsonResult selectById(Integer jobId){
+        logger.info("查询职位信息详情id={}",jobId);
+        if(jobId == null || jobId == 0){
+            return new JsonResult(ResultStatusCode.NOT_NULL);
+        }
+        PublishJob publishJob = publishJobService.selectById(jobId);
+        if(publishJob == null){
+            return new JsonResult(ResultStatusCode.DB_RESOURCE_NULL);
+        }
+        return new JsonResult(ResultStatusCode.SUCCESS,publishJob);
     }
 
 }

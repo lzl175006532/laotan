@@ -52,6 +52,7 @@ public enum ResultStatusCode {
     DONT_MESS_ABOUT(10041,"别瞎搞，乱传什么参数？？？"),
 
     NO_PERMISSIONS(20000,"没有权限"),
+    TOKEN_ERROR(30000,"token错误：不存在或无效"),
 
     ZHONGJI(999999,"限制最后节点");
 

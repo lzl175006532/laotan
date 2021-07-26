@@ -74,6 +74,9 @@ public class Company extends BaseEntity {
     @ApiModelProperty(value = "工商信息-营业执照url")
     private String businessLicenseUrl;
 
+    @ApiModelProperty(value = "0-未审核，1-审核通过，2-审核拒绝")
+    private Integer status;
+
     @ApiModelProperty(value = "企业相册")
     @TableField(exist = false)
     private List<CompImg> imgList;

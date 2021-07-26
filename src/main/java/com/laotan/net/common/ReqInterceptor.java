@@ -1,5 +1,6 @@
 package com.laotan.net.common;
 
+import com.laotan.net.common.util.RedisUtils;
 import com.laotan.net.service.AccountService;
 import com.laotan.net.service.UserTokenService;
 import org.slf4j.Logger;
@@ -36,6 +37,8 @@ public class ReqInterceptor extends WebMvcConfigurerAdapter {
     AccountService accountService;
     @Autowired
     UserTokenService userTokenService;
+    @Autowired
+    RedisUtils redisUtils;
 
     @Bean
     public SecurityInterceptor getSecurityInterceptor() {
@@ -48,12 +51,14 @@ public class ReqInterceptor extends WebMvcConfigurerAdapter {
 
         // 排除配置
         addInterceptor.excludePathPatterns("/error");
-        addInterceptor.excludePathPatterns("/app/login/**");
+        addInterceptor.excludePathPatterns("/app/login/login");
+        addInterceptor.excludePathPatterns("/app/login/setPassword");
         addInterceptor.excludePathPatterns("/static/**");
         //swagger不拦截
         addInterceptor.excludePathPatterns("/swagger**/**");
         addInterceptor.excludePathPatterns("/webjars**/**");
         addInterceptor.excludePathPatterns("/platform**/**");
+        addInterceptor.excludePathPatterns("/doc.html");
         // 临时调试使用
         addInterceptor.excludePathPatterns("/h5/**");
 
@@ -68,7 +73,7 @@ public class ReqInterceptor extends WebMvcConfigurerAdapter {
                 throws Exception {
             String token = request.getHeader("token");
             if(StringUtils.isEmpty(token)){
-                response.sendError(ResultStatusCode.NOT_NULL.getCode(),"token不能为空");
+                response.sendError(400,"token不能为空");
                 return false;
             }
             JsonResult jsonResult = userTokenService.authToken(token);
@@ -79,6 +84,8 @@ public class ReqInterceptor extends WebMvcConfigurerAdapter {
             HttpSession session = request.getSession();
             //放入session
             session.setAttribute("token",token);
+            //放入redis中
+            redisUtils.setCacheObject(token,jsonResult.getContent());
             return true;
         }
 

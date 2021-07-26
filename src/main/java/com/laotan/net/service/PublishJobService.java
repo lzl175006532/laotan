@@ -38,4 +38,14 @@ public interface PublishJobService extends IService<PublishJob> {
      * @Description: 根据参数searchJobVO查询发布职位信息
      */
     IPage<PublishJob> selectJobList(SearchJobVO searchJobVO);
+
+    /**
+     * @Copyright: 通泰信诚
+     * @Author: lizilong
+     * @Since: 2021/7/26 20:06
+     * @Params: [jobId]
+     * @Return: com.laotan.net.entity.PublishJob
+     * @Description: 根据职位id查询详情
+     */
+    PublishJob selectById(Integer jobId);
 }

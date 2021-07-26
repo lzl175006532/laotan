@@ -3,17 +3,15 @@ package com.laotan.net.controller.app;
 import com.laotan.net.common.JsonResult;
 import com.laotan.net.common.ResultStatusCode;
 import com.laotan.net.entity.Boss;
-import com.laotan.net.entity.User;
+import com.laotan.net.entity.Company;
 import com.laotan.net.service.BossService;
-import com.laotan.net.service.UserService;
+import com.laotan.net.service.CompanyService;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,6 +31,8 @@ public class BossController {
 
     @Autowired
     private BossService bossService;
+    @Autowired
+    private CompanyService companyService;
 
     /**
      * @Copyright: 通泰信诚
@@ -51,6 +51,26 @@ public class BossController {
         logger.info("注册招聘者用户信息，姓名为{}",boss.getUsername());
         Boss bossSave = bossService.saveOrUpdateBossInfo(boss);
         return new JsonResult(ResultStatusCode.SUCCESS,bossSave);
+    }
+
+    /**
+     * @Copyright: 通泰信诚
+     * @Author: lizilong
+     * @Since: 2021/7/26 16:32
+     * @Params: [boss]
+     * @Return: com.laotan.net.common.JsonResult
+     * @Description: HR加入到现有公司中
+     */
+    @ApiOperation(value="HR加入到现有公司中", notes="HR加入到现有公司中")
+    @PostMapping(value = "/joinCompany")
+    public JsonResult joinCompany(@RequestBody Boss boss) {
+        if(boss == null || StringUtils.isEmpty(boss.getCompanyName())){
+            return new JsonResult(ResultStatusCode.NOT_NULL);
+        }
+        logger.info("HR{}加入到现有公司{}中",boss.getUsername(),boss.getCompanyName());
+        Company company = companyService.selectBycompName(boss.getCompanyName());
+        boss.setCompId(company.getId());
+        return this.saveOrUpdateInfo(boss);
     }
 
 }

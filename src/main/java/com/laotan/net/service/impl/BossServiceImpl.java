@@ -70,15 +70,12 @@ public class BossServiceImpl extends ServiceImpl<BossMapper, Boss> implements Bo
     @Override
     public Boss saveOrUpdateBossInfo(Boss boss) {
         Integer id = boss.getId();
-        Company company = boss.getCompany();
         if(id == null || id == 0){
             //新增
             return this.saveBossInfo(boss);
         }else{
             //更新boss对象
             super.updateById(boss);
-            //更新公司信息
-            companyService.updateCompanyInfo(company);
         }
         return boss;
     }
