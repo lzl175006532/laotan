@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -51,7 +52,19 @@ public class BossServiceImpl extends ServiceImpl<BossMapper, Boss> implements Bo
     @Override
     public Boss saveOrUpdateBossInfo(Boss boss) {
         Integer id = boss.getId();
-        //处理附件
+        //处理附件:认证视频信息
+        if(boss != null && boss.getAuthFile() != null){
+            StringBuffer filePath = new StringBuffer();
+            String fileName = fileUtils.uploadFile(boss.getAuthFile(), filePath);
+            boss.setAuthFileUrl(filePath.toString());
+            boss.setAuthFileName(fileName);
+            //根据身份证号码判断男女,倒数第二位是奇数则为男性
+            String idNumber = boss.getIdNumber();
+            if(!StringUtils.isEmpty(idNumber) && (Integer.valueOf(idNumber.substring(idNumber.length() - 2,idNumber.length() - 1))&1) == 1 ){
+                boss.setSex("男");
+            }
+        }
+        //处理附件:头像信息
         if(boss != null && boss.getHeadImgFile() != null){
             StringBuffer filePath = new StringBuffer();
             String fileName = fileUtils.uploadFile(boss.getHeadImgFile(), filePath);

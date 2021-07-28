@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -37,8 +38,15 @@ public class User extends BaseEntity {
     @ApiModelProperty(value = "手机号码")
     private String cellPhone;
 
-    @ApiModelProperty(value = "头像")
+    @ApiModelProperty(value = "头像文件名称")
+    private String headImgName;
+
+    @ApiModelProperty(value = "头像文件路径")
     private String headImgUrl;
+
+    @ApiModelProperty(value = "头像图片")
+    @TableField(exist = false)
+    private MultipartFile headImgFile;
 
     @ApiModelProperty(value = "性别")
     private String sex;

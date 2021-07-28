@@ -34,6 +34,19 @@ public class Boss extends BaseEntity {
     @ApiModelProperty(value = "用户姓名")
     private String username;
 
+    @ApiModelProperty(value = "身份证号")
+    private String idNumber;
+
+    @ApiModelProperty(value = "认证视频路径")
+    private String authFileUrl;
+
+    @ApiModelProperty(value = "认证视频名称")
+    private String authFileName;
+
+    @ApiModelProperty(value = "认证视频")
+    @TableField(exist = false)
+    private MultipartFile authFile;
+
     @ApiModelProperty(value = "手机号码")
     private String cellPhone;
 

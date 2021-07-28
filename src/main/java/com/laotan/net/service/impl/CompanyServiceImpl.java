@@ -78,6 +78,12 @@ public class CompanyServiceImpl extends ServiceImpl<CompanyMapper, Company> impl
 
     @Override
     public Company saveOrUpdateCompInfo(Company company) throws Exception{
+        //处理营业执照文件名称businessLicenseName
+        MultipartFile businessLicenseFile = company.getBusinessLicenseFile();
+        StringBuffer businessLicenseFilePath = new StringBuffer();
+        String businessLicenseName = fileUtils.uploadFile(businessLicenseFile, businessLicenseFilePath);
+        company.setBusinessLicenseName(businessLicenseName);
+        company.setBusinessLicenseUrl(businessLicenseFilePath.toString());
         if(company.getId() != null && company.getId() != 0){
             //更新
             Company companyDB = super.getById(company.getId());

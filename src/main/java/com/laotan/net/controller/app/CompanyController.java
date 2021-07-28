@@ -80,7 +80,7 @@ public class CompanyController {
 
     @ApiOperation(value="保存或更新企业信息,如果是修改：修改哪个哪个不为空，并且id不为空，其他为空即可", notes="保存或更新企业信息,如果是修改：修改哪个哪个不为空，并且id不为空，其他为空即可")
     @PostMapping(value = "/saveOrUpdateInfo")
-    public JsonResult saveOrUpdateInfo(@RequestBody Company company) {
+    public JsonResult saveOrUpdateInfo(Company company) {
         if(company == null){
             return new JsonResult(ResultStatusCode.NOT_NULL);
         }

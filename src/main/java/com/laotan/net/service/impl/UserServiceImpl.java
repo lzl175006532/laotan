@@ -2,6 +2,7 @@ package com.laotan.net.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.laotan.net.common.util.FileUtils;
 import com.laotan.net.common.util.TokenUtil;
 import com.laotan.net.mapper.UserMapper;
 import com.laotan.net.entity.*;
@@ -38,6 +39,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private EducationHistoryService educationHistoryService;
     @Autowired
     private AccountService accountService;
+    @Autowired
+    private FileUtils fileUtils;
 
 
     @Override
@@ -107,6 +110,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public User saveOrUpdateInfo(User user) {
+        //处理附件:头像文件信息
+        if(user != null && user.getHeadImgFile() != null){
+            StringBuffer filePath = new StringBuffer();
+            String fileName = fileUtils.uploadFile(user.getHeadImgFile(), filePath);
+            user.setHeadImgUrl(filePath.toString());
+            user.setHeadImgName(fileName);
+        }
         Integer id = user.getId();
         if(id == null || id == 0){
             return this.saveUserInfo(user);

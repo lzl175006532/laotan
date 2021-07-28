@@ -75,6 +75,13 @@ public class Company extends BaseEntity {
     @ApiModelProperty(value = "工商信息-营业执照url")
     private String businessLicenseUrl;
 
+    @ApiModelProperty(value = "工商信息-营业执照文件名称")
+    private String businessLicenseName;
+
+    @ApiModelProperty(value = "工商信息-营业执照文件")
+    @TableField(exist = false)
+    private MultipartFile businessLicenseFile;
+
     @ApiModelProperty(value = "0-未审核，1-审核通过，2-审核拒绝")
     private Integer status;
 
