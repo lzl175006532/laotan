@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -80,6 +81,10 @@ public class Company extends BaseEntity {
     @ApiModelProperty(value = "企业相册")
     @TableField(exist = false)
     private List<CompImg> imgList;
+
+    @ApiModelProperty(value = "企业相册图片文件")
+    @TableField(exist = false)
+    private MultipartFile[] imgFiles;
 
     @ApiModelProperty(value = "企业福利")
     @TableField(exist = false)

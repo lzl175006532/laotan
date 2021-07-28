@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.laotan.net.common.JsonResult;
 import com.laotan.net.common.util.CommonUtil;
+import com.laotan.net.common.util.FileUtils;
 import com.laotan.net.entity.Boss;
 import com.laotan.net.entity.CompImg;
 import com.laotan.net.entity.CompWelfare;
@@ -20,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -42,6 +44,8 @@ public class CompanyServiceImpl extends ServiceImpl<CompanyMapper, Company> impl
     private CompImgService compImgService;
     @Autowired
     private CompWelfareService compWelfareService;
+    @Autowired
+    private FileUtils fileUtils;
 
     @Override
     public Integer deleteByCompId(Integer compId) {
@@ -85,12 +89,18 @@ public class CompanyServiceImpl extends ServiceImpl<CompanyMapper, Company> impl
             //新增
             super.save(company);
         }
-        //处理外部信息，没有在company表中的：imgList、comWelfareList
+        //处理外部信息，没有在company表中的：企业相册imgList、公司福利comWelfareList
         List<CompImg> imgList = company.getImgList();
-        if(imgList != null && imgList.size() > 0){
-            for (CompImg imgInfo:imgList) {
-                imgInfo.setCompId(company.getId());
-                // TODO: 2021/7/26 图片路径怎么搞？
+        MultipartFile[] imgFiles = company.getImgFiles();
+        if(imgFiles != null && imgFiles.length > 0){
+            for (MultipartFile multipartFile:imgFiles) {
+                CompImg compImg = new CompImg();
+                compImg.setCompId(company.getId());
+                StringBuffer filePath = new StringBuffer();
+                String fileName = fileUtils.uploadFile(multipartFile, filePath);
+                compImg.setUrl(filePath.toString());
+                compImg.setImgName(fileName);
+                imgList.add(compImg);
             }
             compImgService.saveBatch(imgList);
         }

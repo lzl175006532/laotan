@@ -2,20 +2,19 @@ package com.laotan.net.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.laotan.net.common.util.FileUtils;
 import com.laotan.net.mapper.BossMapper;
 import com.laotan.net.entity.Boss;
 import com.laotan.net.entity.CompImg;
 import com.laotan.net.entity.CompWelfare;
 import com.laotan.net.entity.Company;
-import com.laotan.net.service.BossService;
-import com.laotan.net.service.CompImgService;
-import com.laotan.net.service.CompWelfareService;
-import com.laotan.net.service.CompanyService;
+import com.laotan.net.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -38,43 +37,35 @@ public class BossServiceImpl extends ServiceImpl<BossMapper, Boss> implements Bo
     private CompWelfareService compWelfareService;
     @Autowired
     private CompanyService companyService;
+    @Autowired
+    private FileUtils fileUtils;
+    @Autowired
+    private SystemParamService systemParamService;
 
     @Override
     public Boss saveBossInfo(Boss boss) {
-        Company company = boss.getCompany();
-        boolean save = super.save(boss);
-        company.setBossId(boss.getId());
-        companyService.save(company);
-        if(save){
-            //保存企业相册
-            List<CompImg> imgList = company.getImgList();
-            if(imgList != null && imgList.size() > 0){
-                for (CompImg compImg:imgList) {
-                    compImg.setCompId(company.getId());
-                }
-                compImgService.saveBatch(imgList);
-            }
-            //保存企业福利
-            List<CompWelfare> comWelfareList = company.getComWelfareList();
-            if(comWelfareList != null && comWelfareList.size() > 0){
-                for (CompWelfare compWelfare:comWelfareList) {
-                    compWelfare.setCompId(company.getId());
-                }
-                compWelfareService.saveBatch(comWelfareList);
-            }
-        }
-
+        super.save(boss);
         return boss;
     }
 
     @Override
     public Boss saveOrUpdateBossInfo(Boss boss) {
         Integer id = boss.getId();
+        //处理附件
+        if(boss != null && boss.getHeadImgFile() != null){
+            StringBuffer filePath = new StringBuffer();
+            String fileName = fileUtils.uploadFile(boss.getHeadImgFile(), filePath);
+            boss.setHeadImgUrl(filePath.toString());
+            boss.setHeadImgName(fileName);
+        }
         if(id == null || id == 0){
             //新增
+            boss.setCreateTime(LocalDateTime.now());
+            boss.setUpdateTime(LocalDateTime.now());
             return this.saveBossInfo(boss);
         }else{
             //更新boss对象
+            boss.setUpdateTime(LocalDateTime.now());
             super.updateById(boss);
         }
         return boss;

@@ -1,14 +1,10 @@
 package com.laotan.net.controller.app;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.laotan.net.common.CommenEnum;
 import com.laotan.net.common.JsonResult;
 import com.laotan.net.common.ResultStatusCode;
 import com.laotan.net.entity.PublishJob;
-import com.laotan.net.service.AccountService;
 import com.laotan.net.service.PublishJobService;
-import com.laotan.net.service.UserService;
 import com.laotan.net.vo.SearchJobVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -17,7 +13,6 @@ import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -72,7 +67,7 @@ public class PublishJobController {
     }
 
     @ApiOperation(value="职位信息列表页面", notes="职位信息列表页面")
-    @PostMapping(value = "/selectJobList")
+    @PostMapping(value = "/selectById")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "jobId", value = "职位id", dataType = "int", required = true, defaultValue = "")
     })

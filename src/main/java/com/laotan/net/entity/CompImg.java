@@ -24,6 +24,9 @@ public class CompImg extends BaseEntity{
     @ApiModelProperty(value = "图片地址")
     private String url ;
 
+    @ApiModelProperty(value = "图片名称")
+    private String imgName ;
+
     @ApiModelProperty(value = "所属公司id")
     private Integer compId ;
 

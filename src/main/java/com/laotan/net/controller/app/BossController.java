@@ -44,7 +44,7 @@ public class BossController {
      */
     @ApiOperation(value="保存或更新招聘者用户注册信息,如果是修改：修改哪个哪个不为空，并且id不为空，其他为空即可", notes="保存或更新招聘者用户注册信息,如果是修改：修改哪个哪个不为空，并且id不为空，其他为空即可")
     @PostMapping(value = "/saveOrUpdateInfo")
-    public JsonResult saveOrUpdateInfo(@RequestBody Boss boss) {
+    public JsonResult saveOrUpdateInfo(Boss boss) {
         if(boss == null){
             return new JsonResult(ResultStatusCode.NOT_NULL);
         }
