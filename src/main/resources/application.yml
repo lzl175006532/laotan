@@ -1,8 +1,8 @@
 spring:
   redis:
 #    host: 35.220.214.154
-#    host: 127.0.0.1
-    host: 192.168.31.72
+    host: 127.0.0.1
+#    host: 192.168.31.72
     port: 6379
     password: Admin@123
     timeout: 60000
@@ -22,8 +22,8 @@ spring:
   datasource:
     username: root
     password: Admin@123
-#    url: jdbc:mysql://127.0.0.1:3306/laotan?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true&zeroDateTimeBehavior=convertToNull&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
-    url: jdbc:mysql://35.220.214.154:3306/laotan?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true&zeroDateTimeBehavior=convertToNull&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://127.0.0.1:3306/laotan?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true&zeroDateTimeBehavior=convertToNull&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+#    url: jdbc:mysql://35.220.214.154:3306/laotan?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true&zeroDateTimeBehavior=convertToNull&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
     driverClassName: com.mysql.cj.jdbc.Driver
 
 #      durid:

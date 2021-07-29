@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.laotan.net.common.JsonResult;
 import com.laotan.net.common.ResultStatusCode;
+import com.laotan.net.service.SystemParamService;
 import com.tencentcloudapi.common.Credential;
 import com.tencentcloudapi.common.exception.TencentCloudSDKException;
 import com.tencentcloudapi.common.profile.ClientProfile;
@@ -26,6 +27,8 @@ public class SendMsgUtil {
 
     @Autowired
     RedisUtils redisUtils;
+    @Autowired
+    SystemParamService systemParamService;
     /**
      * @Copyright: 通泰信诚
      * @Author: lizilong
@@ -38,7 +41,10 @@ public class SendMsgUtil {
         try{
             // 实例化一个认证对象，入参需要传入腾讯云账户secretId，secretKey,此处还需注意密钥对的保密
             // 密钥可前往https://console.cloud.tencent.com/cam/capi网站进行获取
-            Credential cred = new Credential("AKIDTmpc8NM4UdV6QSEj25zd06vUmnWzB6j6", "7wUlmW0D9oCJAj12nHUP3RYOxFG0TfaE");
+            String secretId = systemParamService.selectByParamKey("SECRET_ID","");
+            String secretKey = systemParamService.selectByParamKey("SECRET_KEY","");
+
+            Credential cred = new Credential(secretId,secretKey);
             // 实例化一个http选项，可选的，没有特殊需求可以跳过
             HttpProfile httpProfile = new HttpProfile();
             httpProfile.setEndpoint("sms.tencentcloudapi.com");
