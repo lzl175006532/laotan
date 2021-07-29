@@ -58,10 +58,12 @@ public class SendMsgUtil {
             //发送手机号
             String[] phoneNumberSet1 = {"+86"+cellPhone};
             req.setPhoneNumberSet(phoneNumberSet1);
-
-            req.setSmsSdkAppId("1400545478");
-            req.setSignName("建新惠民");
-            req.setTemplateId("1033212");
+            String smsSdkAppId = systemParamService.selectByParamKey("SMS_SDK_APP_ID","");
+            req.setSmsSdkAppId(smsSdkAppId);
+            String signName = systemParamService.selectByParamKey("SIGN_NAME","");
+            req.setSignName(signName);
+            String templateId = systemParamService.selectByParamKey("TEMPLATE_ID","");
+            req.setTemplateId(templateId);
             //短信内容
             String msgContent = (int)((Math.random()*9+1)*100000) +"";
             String[] templateParamSet1 = {msgContent};
