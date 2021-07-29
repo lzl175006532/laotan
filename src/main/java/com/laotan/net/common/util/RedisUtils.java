@@ -39,11 +39,11 @@ public class RedisUtils
      * @param key 缓存的键值
      * @param value 缓存的值
      * @param timeout 时间
-     * @param timeUnit 时间颗粒度
+     * @param timeUnit 时间颗粒度,写死了单位为秒
      */
-    public <T> void setCacheObject(final String key, final T value, final Long timeout, final TimeUnit timeUnit)
+    public <T> void setCacheObject(final String key, final T value, final Long timeout)
     {
-        redisTemplate.opsForValue().set(key, value, timeout, timeUnit);
+        redisTemplate.opsForValue().set(key, value, timeout, TimeUnit.SECONDS);
     }
 
     /**

@@ -1,6 +1,7 @@
 package com.laotan.net.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.laotan.net.common.JsonResult;
 import com.laotan.net.entity.Account;
 import com.laotan.net.entity.User;
 
@@ -24,7 +25,7 @@ public interface AccountService extends IService<Account> {
      * @Return: com.laotan.net.entity.User
      * @Description: 手机号登录
      */
-    Account login(String cellPhone , String verifyCode,String password,String type);
+    JsonResult login(String cellPhone , String verifyCode, String password, String type);
 
     /**
      * @Copyright: 通泰信诚

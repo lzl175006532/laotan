@@ -3,6 +3,7 @@ package com.laotan.net.controller.app;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.laotan.net.common.JsonResult;
 import com.laotan.net.common.ResultStatusCode;
+import com.laotan.net.common.util.SendMsgUtil;
 import com.laotan.net.entity.*;
 import com.laotan.net.service.*;
 import com.laotan.net.vo.SearchJobVO;
@@ -10,10 +11,10 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,12 +38,34 @@ public class LoginController {
     @Autowired
     private UserService userService;
     @Autowired
+    private SendMsgUtil sendMsgUtil;
+    @Autowired
     private PublishJobService publishJobService;
     @Autowired
     private CompanyService companyService;
     @Autowired
     private UserTokenService userTokenService;
 
+    /**
+     * @Copyright: 通泰信诚
+     * @Author: lizilong
+     * @Since: 2021/5/21 11:38
+     * @Params: [account, password]
+     * @Return: com.ttxc.newenergy.common.JsonResult
+     * @Description: app手机号、短信验证码登录
+     */
+    @ApiOperation(value="手机号发送验证码", notes="手机号发送验证码")
+    @PostMapping(value = "/sendMsg")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "cellPhone", value = "手机号", dataType = "String", required = true, defaultValue = "")
+    })
+    public JsonResult sendMsg(String cellPhone){
+        logger.info("手机号{}开始发送验证码",cellPhone);
+        if(StringUtils.isEmpty(cellPhone) ){
+            return new JsonResult(ResultStatusCode.NOT_NULL);
+        }
+        return sendMsgUtil.sendVerificationCode(cellPhone);
+    }
     /**
      * @Copyright: 通泰信诚
      * @Author: lizilong
@@ -67,18 +90,8 @@ public class LoginController {
         if(!"PASSWORD".equals(type) && !"VERIFYCODE".equals(type)){
             return new JsonResult(ResultStatusCode.DONT_MESS_ABOUT);
         }
-        Account accountDB = accountService.login(cellPhone, verifyCode, password, type);
-        if(accountDB == null){
-            return new JsonResult(ResultStatusCode.DB_RESOURCE_NULL.getCode(),"用户不存在或密码不正确");
-        }
-        //增加token逻辑
-        String userToken = userTokenService.createUserToken(accountDB);
-        boolean b = accountService.updateById(accountDB);
-        if(!b){
-            return new JsonResult(ResultStatusCode.FAIL_OPERATION.getCode(),"保存token失败");
-        }
-        logger.info("{}登录结束，验证码为{}",cellPhone,verifyCode);
-        return new JsonResult(ResultStatusCode.SUCCESS,accountDB);
+
+        return accountService.login(cellPhone, verifyCode, password, type);
     }
 
     @ApiOperation(value="手机验证码登录注册之后设置密码", notes="手机验证码登录注册之后设置密码")
