@@ -25,4 +25,9 @@ public interface WorkHistoryService extends IService<WorkHistory> {
     根据用户id查询
      */
     List<WorkHistory> selectByUserId(Integer userId);
+
+    /*
+    根据id删除
+     */
+    Integer deleteById(Integer workHistoryId);
 }

@@ -39,7 +39,13 @@ public class EducationHistoryServiceImpl extends ServiceImpl<EducationHistoryMap
     public List<EducationHistory> selectByUserId(Integer userId) {
         LambdaQueryWrapper<EducationHistory> wrapper = new LambdaQueryWrapper();
         wrapper.eq(EducationHistory :: getUserId,userId);
+        wrapper.orderByDesc(EducationHistory :: getInSchoolTime);
         List<EducationHistory> educationHistories = educationHistoryMapper.selectList(wrapper);
         return educationHistories;
+    }
+
+    @Override
+    public Integer deleteById(Integer educationHistoryId) {
+        return educationHistoryMapper.deleteById(educationHistoryId);
     }
 }

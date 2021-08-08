@@ -40,12 +40,17 @@ public interface UserService extends IService<User> {
      * @Since: 2021/7/13 22:21
      * @Params:
      * @Return:
-     * @Description: 保存或更新用户注册简历信息,如果是修改：修改哪个哪个不为空，并且id不为空，其他为空即可
+     * @Description: 保存或更新用户基本信息
      */
-    User saveOrUpdateInfo(User user);
+    User saveOrUpdateJBXXInfo(User user);
 
     /*
     根据token获取用户信息
      */
     User selectUserInfoByToken(String token);
+
+    /*
+    保存个人优势
+     */
+    User saveOrUpdateGRYSInfo(User user);
 }

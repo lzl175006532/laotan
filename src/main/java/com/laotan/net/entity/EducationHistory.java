@@ -30,6 +30,9 @@ public class EducationHistory extends BaseEntity {
     @ApiModelProperty(value = "学历")
     private String education;
 
+    @ApiModelProperty(value = "大学名称")
+    private String universityName;
+
     @ApiModelProperty(value = "专业")
     private String major;
 

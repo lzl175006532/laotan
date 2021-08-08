@@ -77,46 +77,17 @@ public class CompanyServiceImpl extends ServiceImpl<CompanyMapper, Company> impl
     }
 
     @Override
-    public Company saveOrUpdateCompInfo(Company company) throws Exception{
-        //处理营业执照文件名称businessLicenseName
-        MultipartFile businessLicenseFile = company.getBusinessLicenseFile();
-        StringBuffer businessLicenseFilePath = new StringBuffer();
-        String businessLicenseName = fileUtils.uploadFile(businessLicenseFile, businessLicenseFilePath);
-        company.setBusinessLicenseName(businessLicenseName);
-        company.setBusinessLicenseUrl(businessLicenseFilePath.toString());
-        if(company.getId() != null && company.getId() != 0){
-            //更新
-            Company companyDB = super.getById(company.getId());
-            Object result = CommonUtil.updateBean(companyDB, company);
-            ObjectMapper objectMapper = new ObjectMapper();
-            companyDB = objectMapper.convertValue(result, Company.class);
-            super.updateById(companyDB);
-        }else{
-            //新增
-            super.save(company);
+    public Company saveOrUpdateCompInfo(Company company){
+
+        if(company.getLogoFile() != null){
+            //处理logo文件
+            MultipartFile logoFile = company.getLogoFile();
+            StringBuffer logoFilePath = new StringBuffer();
+            String logoName = fileUtils.uploadFile(logoFile, logoFilePath);
+            company.setLogoName(logoName);
+            company.setLogoPath(logoFilePath.toString());
         }
-        //处理外部信息，没有在company表中的：企业相册imgList、公司福利comWelfareList
-        List<CompImg> imgList = company.getImgList();
-        MultipartFile[] imgFiles = company.getImgFiles();
-        if(imgFiles != null && imgFiles.length > 0){
-            for (MultipartFile multipartFile:imgFiles) {
-                CompImg compImg = new CompImg();
-                compImg.setCompId(company.getId());
-                StringBuffer filePath = new StringBuffer();
-                String fileName = fileUtils.uploadFile(multipartFile, filePath);
-                compImg.setUrl(filePath.toString());
-                compImg.setImgName(fileName);
-                imgList.add(compImg);
-            }
-            compImgService.saveBatch(imgList);
-        }
-        List<CompWelfare> comWelfareList = company.getComWelfareList();
-        if(comWelfareList != null && comWelfareList.size() > 0){
-            for (CompWelfare compWelfare:comWelfareList) {
-                compWelfare.setCompId(company.getId());
-            }
-            compWelfareService.saveBatch(comWelfareList);
-        }
+        super.saveOrUpdate(company);
         return company;
     }
 
@@ -128,5 +99,72 @@ public class CompanyServiceImpl extends ServiceImpl<CompanyMapper, Company> impl
         List<CompWelfare> comWelfareList = compWelfareService.selectByCompId(compId);
         company.setComWelfareList(comWelfareList);
         return company;
+    }
+
+    @Override
+    public Company saveOrUpdateQYFLInfo(Company company) {
+        List<CompWelfare> comWelfareList = company.getComWelfareList();
+        //删除之前公司福利
+        compWelfareService.deleteByCompId(company.getId());
+        if(comWelfareList !=null && comWelfareList.size() > 0){
+            compWelfareService.saveBatch(comWelfareList);
+        }
+        return company;
+    }
+
+    @Override
+    public Company saveOrUpdateQYJSInfo(Company company) {
+        Integer id = company.getId();
+        Company companyDB = super.getById(id);
+        companyDB.setCompDetail(company.getCompDetail());
+        super.updateById(companyDB);
+        return companyDB;
+    }
+
+    @Override
+    public CompImg saveOrUpdateQYXCInfo(CompImg compImg) {
+        StringBuffer filePath = new StringBuffer();
+        String fileName = fileUtils.uploadFile(compImg.getImgFile(), filePath);
+        compImg.setUrl(filePath.toString());
+        compImg.setImgName(fileName);
+        compImgService.save(compImg);
+        return compImg;
+    }
+
+    @Override
+    public String saveOrUpdateQYGWInfo(Integer compId, String compUccn) {
+        Company comp = super.getById(compId);
+        comp.setCompUccn(compUccn);
+        super.updateById(comp);
+        return compUccn;
+    }
+
+    @Override
+    public String saveOrUpdateQYDZInfo(Integer compId, String compUrl) {
+        Company comp = super.getById(compId);
+        comp.setCompUccn(compUrl);
+        super.updateById(comp);
+        return compUrl;
+    }
+
+    @Override
+    public Company saveOrUpdateGSXXInfo(Company company) {
+        Integer id = company.getId();
+        Company companyDB = super.getById(id);
+        if(company.getBusinessLicenseFile() != null){
+            //处理营业执照文件名称businessLicenseName
+            MultipartFile businessLicenseFile = company.getBusinessLicenseFile();
+            StringBuffer businessLicenseFilePath = new StringBuffer();
+            String businessLicenseName = fileUtils.uploadFile(businessLicenseFile, businessLicenseFilePath);
+            companyDB.setBusinessLicenseName(businessLicenseName);
+            companyDB.setBusinessLicenseUrl(businessLicenseFilePath.toString());
+        }
+        companyDB.setCompFullName(company.getCompFullName());
+        companyDB.setCompLegalPerson(company.getCompLegalPerson());
+        companyDB.setCompCapital(company.getCompCapital());
+        companyDB.setCompType(company.getCompType());
+        companyDB.setCompUnicode(company.getCompUnicode());
+        super.updateById(companyDB);
+        return companyDB;
     }
 }

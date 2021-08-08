@@ -73,6 +73,7 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
         }
         //增加token逻辑
         userTokenService.createUserToken(accountDB);
+
         boolean b = this.updateById(accountDB);
         if(!b){
             return new JsonResult(ResultStatusCode.FAIL_OPERATION.getCode(),"保存token失败");

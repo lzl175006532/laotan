@@ -42,4 +42,9 @@ public class JobIntentionServiceImpl extends ServiceImpl<JobIntentionMapper, Job
         List<JobIntention> jobIntentions = jobIntentionMapper.selectList(wrapper);
         return jobIntentions;
     }
+
+    @Override
+    public void deleteById(Integer jobIntentionId) {
+        jobIntentionMapper.deleteById(jobIntentionId);
+    }
 }

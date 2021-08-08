@@ -32,8 +32,15 @@ public class Company extends BaseEntity {
     private Integer bossId;
 
     //基本信息
-    @ApiModelProperty(value = "基本信息-企业logo")
-    private String logo;
+    @ApiModelProperty(value = "基本信息-企业logo地址")
+    private String logoPath;
+
+    @ApiModelProperty(value = "基本信息-企业logo名称")
+    private String logoName;
+
+    @ApiModelProperty(value = "基本信息-企业logo附件")
+    @TableField(exist = false)
+    private MultipartFile logoFile;
 
     @ApiModelProperty(value = "基本信息-企业简称")
     private String compSimpleName;
@@ -88,10 +95,6 @@ public class Company extends BaseEntity {
     @ApiModelProperty(value = "企业相册")
     @TableField(exist = false)
     private List<CompImg> imgList;
-
-    @ApiModelProperty(value = "企业相册图片文件")
-    @TableField(exist = false)
-    private MultipartFile[] imgFiles;
 
     @ApiModelProperty(value = "企业福利")
     @TableField(exist = false)

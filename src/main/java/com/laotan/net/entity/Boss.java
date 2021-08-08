@@ -11,10 +11,6 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.time.LocalDate;
-import java.util.List;
-
 /**
  * <p>
  * 用户表
@@ -73,7 +69,7 @@ public class Boss extends BaseEntity {
     private String email;
 
     @ApiModelProperty(value = "个性签名")
-    private String advantage;
+    private String signature;
 
     @ApiModelProperty(value = "所属公司id")
     private Integer compId;

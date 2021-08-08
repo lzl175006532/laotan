@@ -35,6 +35,9 @@ public class User extends BaseEntity {
     @ApiModelProperty(value = "状态:在职、离职、在校")
     private String status;
 
+    @ApiModelProperty(value = "个性签名")
+    private String signature;
+
     @ApiModelProperty(value = "手机号码")
     private String cellPhone;
 
@@ -52,10 +55,10 @@ public class User extends BaseEntity {
     private String sex;
 
     @ApiModelProperty(value = "出生日期")
-    private LocalDate birthday;
+    private String birthday;
 
     @ApiModelProperty(value = "参加工作时间")
-    private LocalDate joinWorkStartTime;
+    private String joinWorkStartTime;
 
     @ApiModelProperty(value = "个人邮箱")
     private String email;

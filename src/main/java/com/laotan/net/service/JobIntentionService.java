@@ -35,4 +35,9 @@ public interface JobIntentionService extends IService<JobIntention> {
      * @Description: 根据用户id查询用户求职意向集合
      */
     List<JobIntention> selectByUserId(Integer id);
+
+    /*
+    根据id删除求职意向
+     */
+    void deleteById(Integer jobIntentionId);
 }

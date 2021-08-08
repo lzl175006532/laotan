@@ -57,9 +57,9 @@ public interface CompanyService extends IService<Company> {
      * @Since: 2021/7/26 18:00
      * @Params: [company]
      * @Return: com.laotan.net.entity.Company
-     * @Description: 保存或更新企业信息,如果是修改：修改哪个哪个不为空，并且id不为空，其他为空即可
+     * @Description: 保存或更新企业基本信息
      */
-    Company saveOrUpdateCompInfo(Company company) throws Exception;
+    Company saveOrUpdateCompInfo(Company company);
 
     /**
      * @Copyright: 通泰信诚
@@ -70,4 +70,62 @@ public interface CompanyService extends IService<Company> {
      * @Description: 根据公司id查询公司详情
      */
     Company selectBycompId(Integer compId);
+
+    /**
+     * @Copyright: 通泰信诚
+     * @Author: lizilong
+     * @Since: 2021/7/26 19:59
+     * @Params: [compId]
+     * @Return: com.laotan.net.entity.Company
+     * @Description: 保存或修改公司企业福利
+     */
+    Company saveOrUpdateQYFLInfo(Company company);
+
+    /**
+     * @Copyright: 通泰信诚
+     * @Author: lizilong
+     * @Since: 2021/7/26 19:59
+     * @Params: [compId]
+     * @Return: com.laotan.net.entity.Company
+     * @Description: 保存或修改公司企业介绍
+     */
+    Company saveOrUpdateQYJSInfo(Company company);
+
+    /**
+     * @Copyright: 通泰信诚
+     * @Author: lizilong
+     * @Since: 2021/7/26 19:59
+     * @Params: [compId]
+     * @Return: com.laotan.net.entity.Company
+     * @Description: 保存公司企业相册
+     */
+    CompImg saveOrUpdateQYXCInfo(CompImg company);
+
+    /**
+     * @Copyright: 通泰信诚
+     * @Author: lizilong
+     * @Since: 2021/7/26 19:59
+     * @Params: [compId]
+     * @Return: com.laotan.net.entity.Company
+     * @Description: 保存公司企业官网
+     */
+    String saveOrUpdateQYGWInfo(Integer compId,String compUccn);
+    /**
+     * @Copyright: 通泰信诚
+     * @Author: lizilong
+     * @Since: 2021/7/26 19:59
+     * @Params: [compId]
+     * @Return: com.laotan.net.entity.Company
+     * @Description: 保存公司企业地址
+     */
+    String saveOrUpdateQYDZInfo(Integer compId, String compUrl);
+    /**
+     * @Copyright: 通泰信诚
+     * @Author: lizilong
+     * @Since: 2021/7/26 19:59
+     * @Params: [compId]
+     * @Return: com.laotan.net.entity.Company
+     * @Description: 保存公司企业地址
+     */
+    Company saveOrUpdateGSXXInfo(Company company);
 }

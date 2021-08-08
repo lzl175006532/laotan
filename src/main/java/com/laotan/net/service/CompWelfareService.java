@@ -22,9 +22,9 @@ public interface CompWelfareService extends IService<CompWelfare> {
      * @Since: 2021/7/13 18:05
      * @Params: [id]
      * @Return: java.lang.Integer
-     * @Description: 根据用户id删除
+     * @Description: 根据公司id删除所有公司福利
      */
-    Integer deleteByUserId(Integer userId);
+    Integer deleteByCompId(Integer compId);
 
     /**
      * @Copyright: 通泰信诚

@@ -29,8 +29,8 @@ public class CompImgServiceImpl extends ServiceImpl<CompImgMapper, CompImg> impl
     private CompImgMapper compImgMapper;
 
     @Override
-    public Integer deleteByUserId(Integer userId) {
-        return compImgMapper.deleteById(userId);
+    public Integer deleteById(Integer id) {
+        return compImgMapper.deleteById(id);
     }
 
     @Override

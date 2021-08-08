@@ -1,6 +1,7 @@
 package com.laotan.net.common.util;
 
 import com.laotan.net.common.ResultStatusCode;
+import com.laotan.net.entity.SystemParam;
 import com.laotan.net.handleException.CustomException;
 import com.laotan.net.service.SystemParamService;
 import org.apache.commons.lang3.StringUtils;
@@ -38,14 +39,18 @@ public class FileUtils {
         int random = (int) ((Math.random() * 9 + 1) * 100000);
         String folder = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date(System.currentTimeMillis())) + random;
         if(filePath == null || StringUtils.isEmpty(filePath.toString())){
-            filePath.append(systemParamService.selectByParamKey("FILE_PATH",""));
+            String base_url = systemParamService.selectByParamKey("BASE_URL", "");
+            filePath.append(base_url + "/file/");
         }
         if (StringUtils.isEmpty(filePath)) {
             throw new CustomException(ResultStatusCode.SYS_DATA_ERROR);
         }
         filePath.append(folder + "/");
         String fileName = file.getOriginalFilename();
-        File dest = new File(filePath + fileName);
+        //拼接完整路径
+        filePath.append(fileName);
+        String destPath = systemParamService.selectByParamKey("FILE_PATH", "");
+        File dest = new File(destPath + folder + "/"+ fileName);
         if (!dest.exists()) {
             dest.getParentFile().mkdirs();
         }
@@ -54,8 +59,7 @@ public class FileUtils {
         } catch (Exception e) {
             throw new CustomException(ResultStatusCode.EXCEPTION);
         }
-        //拼接完整路径
-        filePath.append(fileName);
+
         return fileName;
     }
 

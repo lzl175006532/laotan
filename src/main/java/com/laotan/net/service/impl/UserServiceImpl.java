@@ -93,6 +93,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper();
         wrapper.eq(User :: getCellPhone,cellPhone);
         User user = userMapper.selectOne(wrapper);
+        if(user == null){
+            return null;
+        }
         //查询求职意向
         List<JobIntention> jobIntentionList = jobIntentionService.selectByUserId(user.getId());
         user.setJobIntentionList(jobIntentionList);
@@ -109,7 +112,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public User saveOrUpdateInfo(User user) {
+    public User saveOrUpdateJBXXInfo(User user) {
         //处理附件:头像文件信息
         if(user != null && user.getHeadImgFile() != null){
             StringBuffer filePath = new StringBuffer();
@@ -117,61 +120,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             user.setHeadImgUrl(filePath.toString());
             user.setHeadImgName(fileName);
         }
-        Integer id = user.getId();
-        if(id == null || id == 0){
-            return this.saveUserInfo(user);
-        }else{
-            User userDB = super.getById(id);
-            if(!StringUtils.isEmpty(user.getAdvantage())){
-                userDB.setAdvantage(user.getAdvantage());
-                super.updateById(userDB);
-            }
-            //更新求职意向
-            List<JobIntention> jobIntentionList = user.getJobIntentionList();
-            if(jobIntentionList != null && jobIntentionList.size() > 0){
-                //删除之前求职意向
-                jobIntentionService.deleteByUserId(user.getId());
-                for (JobIntention jobIntention:jobIntentionList) {
-                    jobIntention.setUserId(user.getId());
-                }
-                jobIntentionService.saveBatch(jobIntentionList);
-                userDB.setJobIntentionList(jobIntentionList);
-            }
-            //更新工作经历
-            List<WorkHistory> workHistoryList = user.getWorkHistoryList();
-            if(workHistoryList != null && workHistoryList.size() > 0){
-                //删除工作经历
-                workHistoryService.deleteByUserId(user.getId());
-                for (WorkHistory workHistory:workHistoryList) {
-                    workHistory.setUserId(user.getId());
-                }
-                workHistoryService.saveBatch(workHistoryList);
-                userDB.setWorkHistoryList(workHistoryList);
-            }
-            //更新项目经历
-            List<ProjectHistory> projectHistoryList = user.getProjectHistoryList();
-            if(projectHistoryList != null && projectHistoryList.size() > 0){
-                //删除项目经历
-                projectHistoryService.deleteByUserId(user.getId());
-                for (ProjectHistory projectHistory:projectHistoryList) {
-                    projectHistory.setUserId(user.getId());
-                }
-                projectHistoryService.saveBatch(projectHistoryList);
-                userDB.setProjectHistoryList(projectHistoryList);
-            }
-            //更新教育经历
-            List<EducationHistory> educationHistoryList = user.getEducationHistoryList();
-            if(educationHistoryList != null && educationHistoryList.size() > 0){
-                //删除教育经历
-                educationHistoryService.deleteByUserId(user.getId());
-                for (EducationHistory educationHistory:educationHistoryList) {
-                    educationHistory.setUserId(user.getId());
-                }
-                educationHistoryService.saveBatch(educationHistoryList);
-                userDB.setEducationHistoryList(educationHistoryList);
-            }
-            return userDB;
-        }
+        this.saveOrUpdate(user);
+        return user;
     }
 
     @Override
@@ -182,6 +132,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
         User user = this.selectUserInfoByCellPhone(account.getCellPhone());
         return user;
+    }
+
+    @Override
+    public User saveOrUpdateGRYSInfo(User user) {
+        Integer id = user.getId();
+        User userDB = super.getById(id);
+        userDB.setAdvantage(user.getAdvantage());
+        super.saveOrUpdate(userDB);
+        return userDB;
     }
 
 }

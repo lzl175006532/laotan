@@ -42,4 +42,9 @@ public class WorkHistoryServiceImpl extends ServiceImpl<WorkHistoryMapper, WorkH
         List<WorkHistory> workHistories = workHistoryMapper.selectList(wrapper);
         return workHistories;
     }
+
+    @Override
+    public Integer deleteById(Integer workHistoryId) {
+        return workHistoryMapper.deleteById(workHistoryId);
+    }
 }

@@ -22,9 +22,9 @@ public interface CompImgService extends IService<CompImg> {
      * @Since: 2021/7/13 18:05
      * @Params: [id]
      * @Return: java.lang.Integer
-     * @Description: 根据用户id删除
+     * @Description: 根据id删除
      */
-    Integer deleteByUserId(Integer userId);
+    Integer deleteById(Integer id);
 
     /**
      * @Copyright: 通泰信诚
@@ -35,4 +35,5 @@ public interface CompImgService extends IService<CompImg> {
      * @Description: 根据公司id查询
      */
     List<CompImg> selectByCompId(Integer compId);
+
 }

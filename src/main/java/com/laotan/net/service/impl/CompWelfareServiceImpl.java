@@ -29,8 +29,10 @@ public class CompWelfareServiceImpl extends ServiceImpl<CompWelfareMapper, CompW
     private CompWelfareMapper compWelfareMapper;
 
     @Override
-    public Integer deleteByUserId(Integer userId) {
-        return compWelfareMapper.deleteById(userId);
+    public Integer deleteByCompId(Integer compId) {
+        LambdaQueryWrapper<CompWelfare> queryWrapper = new LambdaQueryWrapper();
+        queryWrapper.eq(CompWelfare :: getCompId,compId);
+        return compWelfareMapper.delete(queryWrapper);
     }
 
     @Override
